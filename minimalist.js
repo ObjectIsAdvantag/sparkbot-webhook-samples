@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 var debug = require('debug')('samples');
-var Utils = require('./webhook/utils');
+var Utils = require('./sparkbot/utils');
 
 
 var started = Date.now();

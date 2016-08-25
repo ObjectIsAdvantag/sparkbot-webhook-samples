@@ -3,7 +3,7 @@
 # Change ip to your docker account if you plan to package and release your own docker image
 DOCKER_ACCOUNT=objectisadvantag
 
-# Change this if you use DockerToolbox
+# Set this the your Host interface if you use DockerToolbox, otherwise leave it to 127.0.01
 DOCKER_HOST_IPADDRESS=192.168.99.101
 
 

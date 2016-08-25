@@ -44,7 +44,10 @@ app.route("/")
 
 
 // starts the Bot service
-var port = process.env.PORT || 8080;
+//
+//    [DO NOT REMOVE] when dockerized, we require DOCKERIZED_PORT prevalence to ensure our app listens on the Dockerfile's EXPOSEd port, 
+//    and not the dynamic PORT assigned by the host.
+var port = process.env.DOCKERIZED_PORT || process.env.PORT || 8080;
 app.listen(port, function () { 
     console.log("Cisco Spark Bot started at http://localhost:" + port + "/");
     console.log("   GET  / for Health checks");

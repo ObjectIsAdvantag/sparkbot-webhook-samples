@@ -8,8 +8,8 @@ To run your bot, simply take the Quick Start below, or take the DevNet Tutorial 
 ## Run locally
 
 ``` bash
-> git clone 
-> cd 
+> git clone https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples
+> cd sparkbot-webhook-samples
 > npm install
 > node minimalists.js
 Cisco Spark Bot started at http://localhost:8080/

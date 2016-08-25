@@ -35,10 +35,10 @@ app.route("/")
             return;
         }
 
-        // event is ready to be processed, let's respond to Spark without waiting whatever the processing outcome will be
+        // event is ready to be processed, let's send a response to Spark without waiting any longer
         res.status(200).json({'message': 'message is being processed by webhook'});
 
-        // take action depending on triggered resource/event, see https://developer.ciscospark.com/webhooks-explained.html
+        // process incoming resource/event, see https://developer.ciscospark.com/webhooks-explained.html
         processWebhookEvent(req.body);
     });
 
@@ -46,18 +46,18 @@ app.route("/")
 // starts the Bot service
 var port = process.env.PORT || 8080;
 app.listen(port, function () { 
-    console.log("Cisco Spark Bot started on port: " + port);
-    console.log("For Healthcheck: GET http://localhost: " + port + "/");
-    console.log("Webhook enpoint: POST http://localhost: " + port : "/");
+    console.log("Cisco Spark Bot started at http://localhost:" + port + "/");
+    console.log("   GET  / for Health checks");
+    console.log("   POST / receives Spark Webhook events");
 });
 
 
-// Invoked when the Spark webhook is trigget
+// Invoked when the Spark webhook is triggered
 function processWebhookEvent(trigger) {
-    console.log("EVENT: " + trigger.resource + "/" + trigger.event + ", with data id: " + trigger.data.id + ", triggered by person id:" + trigger.actorId);
 
     //
-    // ADD YOUR CODE HERE
+    // YOUR CODE HERE
     //
+    console.log("EVENT: " + trigger.resource + "/" + trigger.event + ", with data id: " + trigger.data.id + ", triggered by person id:" + trigger.actorId);
       
 }

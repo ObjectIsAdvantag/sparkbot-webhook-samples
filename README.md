@@ -12,7 +12,9 @@ To run your bot, simply take the Quick Start below, or take the DevNet Tutorial 
 > cd 
 > npm install
 > node minimalists.js
-Cisco Spark Bot started on port: 8080
+Cisco Spark Bot started at http://localhost:8080/
+   GET  / for Health checks
+   POST / receives Spark Webhook events
 ```
 
 Check your bot is accessible by hitting its heath endpoint at http://localhost:8080/
@@ -34,7 +36,6 @@ Replace *mybot* with a unique name so that you do not mess up with other develop
 and run the following commands:
 
 ``` bash
-// In another terminal
 > npm install localtunnel -g
 > lt -s mybot -p 8080
 your url is: http://<yourbot>.localtunnel.me
@@ -57,26 +58,41 @@ Note: make sure you hit the _secured_ HTTPS endpoint.
 
 ## Register your bot as a Spark WebHook
 
-Go to the Cisco Spark Developer portal, login and create a new Webhook.
+Last step, is to create a Spark Webhook for your bot.
 
-TODO: add figure
+This can be done via the Cisco Spark Developer Portal / [Create a WebHook](https://developer.ciscospark.com/endpoint-webhooks-post.html) interactive documentation,
+but also via Postma or a CURL command as will see right after.
+
+For the scope of this example, we'll associate our bot to all resources and events.
+
+Note that even if the minimalist bot sample can process all events, you can register a webhook with a more limited set of events. Only these will be fired to your bot then.
+
+![](docs/img/spark4devs-create-webhook-all-all.png)
 
 
 As an alternative, you can run this CURL command.
 
 ``` bash
-// In another terminal
-> curl https://
-// npm install
+> curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer YOUR_SPARK_TOKEN" -d '{
+        "name": "Sparkbot Samples",
+        "resource": "all",
+        "event": "all",
+        "targetUrl": "https://yourbot.localtunnel.me/"
+    }' "https://api.ciscospark.com/v1/webhooks/"
 ```
 
-To go further, we suggest you run other examples in this repo,
-or learn to host your bot on a public cloud.
+
+Or you can also create this webhook via Postman.
+
+![](docs/img/postman-create-webhook-all-all.png)
 
 
-## Step by step guide
+# To go further
 
-Take the DevNet Learning lab associated to this code samples.
+- Run other examples in this repo
+- Take the DevNet Learning labs related to these code samples.
+- Learn to host your bot on a public cloud.
+
 
 
 

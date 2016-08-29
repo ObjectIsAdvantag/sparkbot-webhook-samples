@@ -5,29 +5,27 @@ var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-var https = require("https");
-
 var debug = require("debug")("sparkbot");
 
 var Utils = require("./utils");
 var webhookResources = [ "memberships", "messages", "rooms"];
 var webhookEvents = [ "created", "deleted", "updated"];
 
-/* Creates a Cisco Spark webhook with specific configuration structure: 
+/* Creates a Cisco Spark webhook with specified configuration structure: 
  *  
  *  { 
- * 		port 		: <int>     		// local port on which the webhook is accessible, defaults to process.env.PORT
- * 		path  		: <string>			// path to which new webhook POST events are expected                    	
+ * 		port, 		// int: local port on which the webhook is accessible
+ * 		path,  		// string: path to which new webhook POST events are expected
+ * 		token		// string: spark API access token                    	
  *  }
- * 
- */
-
-/* Creates a Cisco Spark webhook with specific configuration structure: 
  *  
+ * If no configuration is specified, the defaults below apply: 
  *  { 
  * 		port 		: process.env.PORT || 8080,
- * 		path		: process.env.WEBHOOK_URL || "/"                    	
+ * 		path		: process.env.WEBHOOK_URL || "/"   
+ * 		token		: process.env.SPARK_TOKEN                  	
  *  }
+ * 
  */
 function Webhook(config) {
 	// Inject defaults if no configuration specified
@@ -35,14 +33,23 @@ function Webhook(config) {
 		debug("webhook instantiated with default configuration");
 		config = {
 			port 		: process.env.PORT || 8080,
-			path		: process.env.WEBHOOK_URL || "/"
+			path		: process.env.WEBHOOK_URL || "/",
+			token		: process.env.SPARK_TOKEN
 		};
 	} 
 	
-	// Abort if bad configuration
+	// Abort if mandatory copnfig parameters are not present
 	if (!config.port || !config.path) {
-		debug("bad configuration for webhook, aborting initializer...");
+		debug("bad configuration for webhook, aborting Webhook constructor");
 		return null;
+	}
+
+	// Check Spark token
+	if (!config.token) {
+		debug("no Spark access token specified, will not fetch message contents and room titles");
+	}
+	else {
+		this.token = config.token;
 	}
 
 	// Webhook listeners
@@ -71,6 +78,7 @@ function Webhook(config) {
 				message: "Congrats, your Cisco Spark webhook is up and running",
 				since: new Date(started).toISOString(),
 				listeners: Object.keys(self.listeners),
+				token: (self.token != null),
 				tip: "Register your bot as a WebHook to start receiving events: https://developer.ciscospark.com/endpoint-webhooks-post.html"
 			});
 		})
@@ -187,6 +195,18 @@ Webhook.prototype.on = function(resource, event, listener) {
 	}	
 
 	debug("on: listener registration error, bad configuration. Resource: '" + resource + "' and event: '" + event + "' do not comply with Spark webhook specifications.");
+}
+
+
+// Get message details from triggered events   
+Webhook.prototype.decryptMessage = function(trigger, cb) {
+	if (!this.token) {
+		debug("no Spark token configured, cannot read message details.")
+		cb(new Error("no Spark token configured, cannot decrypt message"), null);
+		return;
+	}
+
+	Utils.readMessage(trigger.data.id, this.token, cb);
 }
 
 module.exports = Webhook

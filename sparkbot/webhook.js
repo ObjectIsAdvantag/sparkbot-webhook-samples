@@ -65,7 +65,7 @@ function Webhook(config) {
 		}
 
 		// Invoke listener
-		debug("invoking listener for resource/event: " + entry + ", with data context: " + trigger.data.id);
+		debug("calling listener for resource/event: " + entry + ", with data context: " + trigger.data.id);
 		listener(trigger);		
 	}
 
@@ -105,7 +105,6 @@ function Webhook(config) {
 		debug("Cisco Spark bot started on port: " + config.port);
 	});
 }
-
 
 
 // Registers a listener for new (resource, event) POSTed to webhook   
@@ -208,6 +207,24 @@ Webhook.prototype.decryptMessage = function(trigger, cb) {
 
 	Utils.readMessage(trigger.data.id, this.token, cb);
 }
+
+
+// Get message details from triggered events   
+Webhook.prototype.processNewMessage = function(cb) {
+	var token = this.token;
+	addMessagesCreatedListener(this, function(trigger) {
+		if (!token) {
+			debug("no Spark token configured, cannot read message details.")
+			cb(new Error("no Spark token configured, cannot decrypt message"), null, null);
+			return;
+		}
+
+		Utils.readMessage(trigger.data.id, token, function (err, message) {
+			cb(null, trigger, message);
+		});
+	});
+}
+
 
 module.exports = Webhook
 

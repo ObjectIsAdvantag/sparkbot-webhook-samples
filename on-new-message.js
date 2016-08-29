@@ -16,7 +16,7 @@ bot.on('messages', 'created', function(trigger) {
   bot.decryptMessage(trigger, function (err, message) {
 
     if (err) {
-      console.log("could not decode message, err: " + err.message); 
+      console.log("could not fetch message, err: " + err.message); 
       return;
     }
 

@@ -2,6 +2,10 @@
 var debug = require('debug')('sparbot');
 
 var Utils = {};
+module.exports = Utils;
+
+var supportedResources = [ "memberships", "messages", "rooms"];
+var supportedEvents = [ "created", "deleted", "updated"];
 
 // Returns true if specified JSON data complies with the Spark Webhook documentation
 // see https://developer.ciscospark.com/webhooks-explained.html 
@@ -36,7 +40,24 @@ Utils.checkWebhookEvent = function(payload) {
 			debug("received payload is not compliant with Spark Webhook specification");
 			return false;
     }
+
+	if (supportedResources.indexOf(payload.resource) == -1) {
+		debug("incoming resource '" + payload.resource + "' does not comply with webhook specifications");
+		return false;
+	} 
+    if (supportedEvents.indexOf(payload.event) == -1) {
+		debug("incoming event '" + payload.event + "' does not comply with webhook specifications");
+		return false;
+	} 
+	if ((payload.resource == "messages") && (payload.event == "updated")) {
+		debug("event 'updated' is not expected for 'messages' resource");
+		return false;
+	}
+	if ((payload.resource == "rooms") && (payload.event == "deleted")) {
+		debug("event 'deleted' is not expected for 'rooms' resource");
+		return false;
+	}
+
     return true;
 };
 
-module.exports = Utils;

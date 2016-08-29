@@ -16,10 +16,10 @@ app.route("/")
     // healthcheck
     .get(function (req, res) {
         res.json({
-        "message": "Congrats, your Cisco Spark bot is up and running",
-        "since": new Date(started).toISOString(),
-        "code": "minimalist.js",
-        "tip": "Register your bot as a WebHook to start receiving events: https://developer.ciscospark.com/endpoint-webhooks-post.html"
+            message: "Congrats, your Cisco Spark bot is up and running",
+            since: new Date(started).toISOString(),
+            code: "minimalist.js",
+            tip: "Register your bot as a WebHook to start receiving events: https://developer.ciscospark.com/endpoint-webhooks-post.html"
         });
     })
 

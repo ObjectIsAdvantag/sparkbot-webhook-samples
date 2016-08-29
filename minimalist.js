@@ -1,14 +1,14 @@
 // a minimalist Cisco Spark webhook based on Express.js
 
-var express = require('express');
+var express = require("express");
 var app = express();
 
-var bodyParser = require('body-parser');
+var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-var debug = require('debug')('samples');
-var Utils = require('./sparkbot/utils');
+var debug = require("debug")("samples");
+var Utils = require("./sparkbot/utils");
 
 
 var started = Date.now();
@@ -16,10 +16,10 @@ app.route("/")
     // healthcheck
     .get(function (req, res) {
         res.json({
-        'message': 'Congrats, your Cisco Spark bot is up and running',
-        'since': new Date(started).toISOString(),
-        'code': 'minimalist.js',
-        'tip': 'Register your bot as a WebHook to start receiving events: https://developer.ciscospark.com/endpoint-webhooks-post.html'
+        "message": "Congrats, your Cisco Spark bot is up and running",
+        "since": new Date(started).toISOString(),
+        "code": "minimalist.js",
+        "tip": "Register your bot as a WebHook to start receiving events: https://developer.ciscospark.com/endpoint-webhooks-post.html"
         });
     })
 
@@ -30,13 +30,13 @@ app.route("/")
         debug("DEBUG: webhook invoked");
         if (!req.body || !Utils.checkWebhookEvent(req.body)) {
             console.log("WARNING: Unexpected payload POSTed, aborting...");
-            res.status(400).json({message: 'Bad payload for Webhook',
-                                    details: 'either the bot is misconfigured or Cisco Spark is running a new API version'});
+            res.status(400).json({message: "Bad payload for Webhook",
+                                    details: "either the bot is misconfigured or Cisco Spark is running a new API version"});
             return;
         }
 
         // event is ready to be processed, let's send a response to Spark without waiting any longer
-        res.status(200).json({'message': 'message is being processed by webhook'});
+        res.status(200).json({message: "message is being processed by webhook"});
 
         // process incoming resource/event, see https://developer.ciscospark.com/webhooks-explained.html
         processWebhookEvent(req.body);

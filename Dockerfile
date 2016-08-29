@@ -5,23 +5,27 @@ FROM node:argon-slim
 
 MAINTAINER Stève Sfartz
 
-# create "node" user
+EXPOSE 8080
+
+# create 'not priviledged' user
 RUN useradd -c 'Node.js user' -m -d /home/node -s /bin/bash node
 
-# distribute application
+# isolate code distribution
 RUN mkdir -p /home/node/samples
-COPY . /home/node/samples
-
-# build application
 WORKDIR /home/node/samples
+
+# build application 
+# [TIP] minimize image rebuilds needs by isolating dependencies from declarative aspects  
+COPY package-docker.json /home/node/samples/package.json
 RUN npm install
+
+# check the .dockerignore file 
+COPY . /home/node/samples
 
 # Switch to user mode
 RUN chown -R node:node /home/node/samples
 USER node
 ENV HOME /home/node
 
-# Run sample as default
-EXPOSE 8080
-
+# Run default sample
 CMD ["node", "minimalist.js"]

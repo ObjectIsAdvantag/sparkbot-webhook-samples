@@ -6,6 +6,7 @@ var debug = require("debug")("sparkbot-utils");
 var Utils = {};
 module.exports = Utils;
 
+
 // Returns true if specified JSON data complies with the Spark Webhook documentation
 // see https://developer.ciscospark.com/webhooks-explained.html 
 //
@@ -154,7 +155,8 @@ Utils.readMessage = function(messageId, token, cb) {
                 return;
             }
 
-            cb(null, message)
+            debug("pushing message details to callback function");
+            cb(null, message);
         });
     });
     req.on('error', function(err) {

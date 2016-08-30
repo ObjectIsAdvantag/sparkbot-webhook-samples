@@ -8,6 +8,8 @@ app.use(bodyParser.json());
 var debug = require("debug")("sparkbot");
 
 var Utils = require("./utils");
+var Interpreter = require("./command");
+
 var webhookResources = [ "memberships", "messages", "rooms"];
 var webhookEvents = [ "created", "deleted", "updated"];
 
@@ -16,14 +18,19 @@ var webhookEvents = [ "created", "deleted", "updated"];
  *  { 
  * 		port, 		// int: local port on which the webhook is accessible
  * 		path,  		// string: path to which new webhook POST events are expected
- * 		token		// string: spark API access token                    	
+ * 		token,		// string: spark API access token  
+ *      trimMention // boolean: filters out mentions of token owner        
+ * 		ignoreSelf  // boolean: ignores message created by token owner       	
  *  }
  *  
  * If no configuration is specified, the defaults below apply: 
  *  { 
- * 		port 		: process.env.PORT || 8080,
- * 		path		: process.env.WEBHOOK_URL || "/"   
- * 		token		: process.env.SPARK_TOKEN                  	
+ * 		port 			: process.env.PORT || 8080,
+ * 		path			: process.env.WEBHOOK_URL || "/" ,  
+ * 		token			: process.env.SPARK_TOKEN,
+ * 		trimMention	 	: true,
+ * 		commandPrefix	: process.env.COMMAND_PREFIX || "/",
+ * 		ignoreSelf		: true                   	
  *  }
  * 
  */
@@ -32,11 +39,19 @@ function Webhook(config) {
 	if (!config) {
 		debug("webhook instantiated with default configuration");
 		config = {
-			port 		: process.env.PORT || 8080,
-			path		: process.env.WEBHOOK_URL || "/",
-			token		: process.env.SPARK_TOKEN
+			port 			: process.env.PORT || 8080,
+			path			: process.env.WEBHOOK_URL || "/",
+			token			: process.env.SPARK_TOKEN,
+			trimMention	 	: true,
+			commandPrefix 	: process.env.COMMAND_PREFIX || "/" ,
+			ignoreSelf		: false
 		};
 	} 
+
+	// Robustify: it is usually safer not to read ourselves, especially if no commandPrefix is specified
+	if (!config.ignoreSelf && !config.commandPrefix) {
+		debug("WARNING: configuration does not prevent for reading from yourself => possible infinite loop, continuing...");
+	}
 	
 	// Abort if mandatory copnfig parameters are not present
 	if (!config.port || !config.path) {
@@ -44,17 +59,18 @@ function Webhook(config) {
 		return null;
 	}
 
-	// Check Spark token
+	// If a Spark token is specified, create a command interpreter
 	if (!config.token) {
-		debug("no Spark access token specified, will not fetch message contents and room titles");
+		debug("no Spark access token specified, will not fetch message contents and room titles, nor interpret commands");
 	}
-	else {
-		this.token = config.token;
-	}
+	this.token = config.token;
+
+	// Initialize command interpreter
+	this.interpreter = new Interpreter(config);
 
 	// Webhook listeners
 	this.listeners = {};
-	self = this;
+	var self = this;
 	function fire(trigger) {
 		// Retreive listener for incoming event
 		var entry = trigger.resource + "/" + trigger.event;
@@ -75,11 +91,20 @@ function Webhook(config) {
 		.get(function (req, res) {
 			debug("healtch check hitted");
 			res.json({
-				message: "Congrats, your Cisco Spark webhook is up and running",
-				since: new Date(started).toISOString(),
-				listeners: Object.keys(self.listeners),
-				token: (self.token != null),
-				tip: "Register your bot as a WebHook to start receiving events: https://developer.ciscospark.com/endpoint-webhooks-post.html"
+				message		: "Congrats, your Cisco Spark webhook is up and running",
+				since			: new Date(started).toISOString(),
+				listeners		: Object.keys(self.listeners),
+				token			: (self.token != null),
+				account			: {
+					type		: self.interpreter.accountType,
+					person		: self.interpreter.person,
+				},
+				interpreter		: {
+					prefix		: self.interpreter.prefix,
+					trimMention	: self.interpreter.trimMention,
+					ignoreSelf  : self.interpreter.ignoreSelf
+				},
+				tip			: "Register your bot as a WebHook to start receiving events: https://developer.ciscospark.com/endpoint-webhooks-post.html"
 			});
 		})
 		.post(function (req, res) {
@@ -107,7 +132,7 @@ function Webhook(config) {
 }
 
 
-// Registers a listener for new (resource, event) POSTed to webhook   
+// Registers a listener for new (resource, event) POSTed to our webhook   
 Webhook.prototype.on = function(resource, event, listener) {
 	if (!listener) {
 		debug("on: listener registration error. Please specify a listener for resource/event");
@@ -197,7 +222,8 @@ Webhook.prototype.on = function(resource, event, listener) {
 }
 
 
-// Get message details from triggered events   
+// Helper function to retreive message details from a (messages/created) Webhook trigger.
+// Expected callback function signature (err, message).
 Webhook.prototype.decryptMessage = function(trigger, cb) {
 	if (!this.token) {
 		debug("no Spark token configured, cannot read message details.")
@@ -209,18 +235,74 @@ Webhook.prototype.decryptMessage = function(trigger, cb) {
 }
 
 
-// Get message details from triggered events   
+// Shortcut to be notified only as new messages are posted into Spark rooms your Webhook has registered against.
+// The callback function will directly receive the message contents : combines .on('messages', 'created', ...) and .decryptMessage(...).
+// Expected callback function signature (err, trigger, message).
 Webhook.prototype.processNewMessage = function(cb) {
 	var token = this.token;
 	addMessagesCreatedListener(this, function(trigger) {
 		if (!token) {
 			debug("no Spark token configured, cannot read message details.")
-			cb(new Error("no Spark token configured, cannot decrypt message"), null, null);
+			cb(new Error("no Spark token configured, cannot decrypt message"), trigger, null);
 			return;
 		}
 
 		Utils.readMessage(trigger.data.id, token, function (err, message) {
+			if (err) {
+				cb (err, trigger, null);
+			}
 			cb(null, trigger, message);
+		});
+	});
+}
+
+  
+Webhook.prototype.interpretAsCommand = function(trigger, message, cb) {
+	if (!trigger || !message) {
+		debug("wrong arguments for interpretAsCommand, aborting...")
+		cb(new Error("bad configuration for interpretAsCommand"), null);
+		return;
+	}
+
+	this.interpreter.extract(trigger, message, function(err, command) {
+		if (err) {
+			debug("error while extracting command, err: " + JSON.stringify(err));
+			cb (err, null);
+			return;
+		}
+
+		cb(null, command);
+	});
+}
+
+
+
+// Shortcut to be notified only as new commands are posted into Spark rooms your Webhook has registered against.
+// The callback function will directly receive the message contents : combines .on('messages', 'created', ...)  .decryptMessage(...) and .extractCommand(...).
+// Expected callback function signature (err, trigger, message, command, args).
+Webhook.prototype.onCommand = function(command, cb) {
+	var token = this.token;
+	addMessagesCreatedListener(this, function(trigger) {
+		if (!token) {
+			debug("no Spark token configured, cannot read message details.")
+			cb(new Error("no Spark token configured, cannot decrypt message"), trigger, null, null);
+			return;
+		}
+
+		Utils.readMessage(trigger.data.id, token, function (err, message) {
+			if (err) {
+				cb (err, trigger, null, null);
+			}
+
+			Utils.extractCommand(trigger, message, command, trimMention, function (found, args) {
+				if (!found) {
+					debug("no further processing, command: " + command + " is not present");
+					return;
+				}
+
+				cb(null, trigger, message, command, args);
+			});
+			
 		});
 	});
 }

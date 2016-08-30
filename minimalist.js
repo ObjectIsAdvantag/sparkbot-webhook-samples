@@ -1,4 +1,6 @@
-// a minimalist Cisco Spark webhook based on Express.js
+/* 
+ * a minimalist Cisco Spark webhook based on Express.js
+ */
 
 var express = require("express");
 var app = express();

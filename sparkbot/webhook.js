@@ -8,7 +8,8 @@ app.use(bodyParser.json());
 var debug = require("debug")("sparkbot");
 
 var Utils = require("./utils");
-var Interpreter = require("./interpreter");
+var CommandInterpreter = require("./interpreter");
+var CommandRouter = require("./router");
 
 var webhookResources = [ "memberships", "messages", "rooms"];
 var webhookEvents = [ "created", "deleted", "updated"];
@@ -65,9 +66,6 @@ function Webhook(config) {
 	}
 	this.token = config.token;
 
-	// Initialize command interpreter
-	this.interpreter = new Interpreter(config);
-
 	// Webhook listeners
 	this.listeners = {};
 	var self = this;
@@ -84,6 +82,10 @@ function Webhook(config) {
 		debug("calling listener for resource/event: " + entry + ", with data context: " + trigger.data.id);
 		listener(trigger);		
 	}
+
+	// Initialize command processors
+	this.interpreter = new CommandInterpreter(config);
+	this.router = new CommandRouter(this);
 
 	// Webhook API routes
 	started = Date.now();
@@ -104,6 +106,7 @@ function Webhook(config) {
 					trimMention	: self.interpreter.trimMention,
 					ignoreSelf  : self.interpreter.ignoreSelf
 				},
+				commands        : Object.keys(self.router.commands),
 				tip			: "Register your bot as a WebHook to start receiving events: https://developer.ciscospark.com/endpoint-webhooks-post.html"
 			});
 		})
@@ -263,7 +266,6 @@ Webhook.prototype.processNewMessage = function(cb) {
 Webhook.prototype.interpretAsCommand = function(message, cb) {
 	if (!message || !cb) {
 		debug("wrong arguments for extractCommand, aborting...")
-		cb(new Error("bad configuration for extractCommand"), null);
 		return;
 	}
 
@@ -282,32 +284,14 @@ Webhook.prototype.interpretAsCommand = function(message, cb) {
 
 // Shortcut to be notified only as new commands are posted into Spark rooms your Webhook has registered against.
 // The callback function will directly receive the message contents : combines .on('messages', 'created', ...)  .decryptMessage(...) and .extractCommand(...).
-// Expected callback function signature (err, trigger, message, command, args).
+// Expected callback function signature (err, command).
 Webhook.prototype.onCommand = function(command, cb) {
-	var token = this.token;
-	addMessagesCreatedListener(this, function(trigger) {
-		if (!token) {
-			debug("no Spark token configured, cannot read message details.")
-			cb(new Error("no Spark token configured, cannot decrypt message"), trigger, null, null);
-			return;
-		}
+	if (!command || !cb) {
+		debug("wrong arguments for onCommand, aborting...")
+		return;
+	}
 
-		Utils.readMessage(trigger.data.id, token, function (err, message) {
-			if (err) {
-				cb (err, trigger, null, null);
-			}
-
-			Utils.extractCommand(trigger, message, command, trimMention, function (found, args) {
-				if (!found) {
-					debug("no further processing, command: " + command + " is not present");
-					return;
-				}
-
-				cb(null, trigger, message, command, args);
-			});
-			
-		});
-	});
+	this.router.addCommand(command, cb);
 }
 
 

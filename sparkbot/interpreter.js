@@ -124,7 +124,7 @@ CommandInterpreter.prototype.extract = function (message, cb) {
 
     // Remove leading command and return 
     splitted.shift();
-    cb(null, { "keyword": keyword, "args": splitted });
+    cb(null, { "keyword": keyword, "args": splitted, "message":message });
 }
 
 

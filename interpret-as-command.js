@@ -21,7 +21,7 @@ bot.processNewMessage(function(err, trigger, message) {
   //
   // ADD YOUR CUSTOM CODE HERE
   //  
-  bot.interpretAsCommand(trigger, message, function (err, command) {
+  bot.interpretAsCommand(message, function (err, command) {
       if (err) {
           console.log("could not interpret message as a command, err: " + err.message); 
           return;

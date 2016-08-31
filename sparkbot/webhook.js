@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 var debug = require("debug")("sparkbot");
 
 var Utils = require("./utils");
-var Interpreter = require("./command");
+var Interpreter = require("./interpreter");
 
 var webhookResources = [ "memberships", "messages", "rooms"];
 var webhookEvents = [ "created", "deleted", "updated"];
@@ -257,15 +257,17 @@ Webhook.prototype.processNewMessage = function(cb) {
 	});
 }
 
-  
-Webhook.prototype.interpretAsCommand = function(trigger, message, cb) {
-	if (!trigger || !message) {
-		debug("wrong arguments for interpretAsCommand, aborting...")
-		cb(new Error("bad configuration for interpretAsCommand"), null);
+
+// This function tries to interpret the triggered Webhook (resource/event) as a command,
+// and invokes the specified callback if successful
+Webhook.prototype.interpretAsCommand = function(message, cb) {
+	if (!message || !cb) {
+		debug("wrong arguments for extractCommand, aborting...")
+		cb(new Error("bad configuration for extractCommand"), null);
 		return;
 	}
 
-	this.interpreter.extract(trigger, message, function(err, command) {
+	this.interpreter.extract(message, function(err, command) {
 		if (err) {
 			debug("error while extracting command, err: " + JSON.stringify(err));
 			cb (err, null);

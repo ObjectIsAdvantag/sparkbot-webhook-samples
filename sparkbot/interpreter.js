@@ -12,7 +12,7 @@ var sparkAccounts = ["machine", "human", "unknown"];
 /* Helper library to interpret Spark commands as they flow in
  * Please invoke with a valid Webhook configuration
  */
-function Interpreter(config) {
+function CommandInterpreter(config) {
     this.token = config.token;
     if (!this.token) {
         debug("token required, skipping interpreter initialization...");
@@ -81,7 +81,7 @@ function trimMention(person, message) {
 // checks if a command can be extracted, if so, invokes the callback with signature (err, { keyword:"", args:[]})
 // if the text should be ignored, the callback is not invoked. Happens if the bot is writing, or if the specified prefix is not present
 // if  
-Interpreter.prototype.extract = function (trigger, message, cb) {
+CommandInterpreter.prototype.extract = function (message, cb) {
     // If the message comes from the bot, ignore it
     if (this.ignoreSelf && (message.personId === this.person.id)) {
         debug("bot is writing => ignoring");
@@ -217,4 +217,4 @@ function trimBotName(text, name) {
 }
 
 
-module.exports = Interpreter;
+module.exports = CommandInterpreter;

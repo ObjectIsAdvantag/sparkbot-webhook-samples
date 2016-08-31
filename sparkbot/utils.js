@@ -2,6 +2,7 @@
 var https = require("https");
 
 var debug = require("debug")("sparkbot-utils");
+var fine = require("debug")("fine-grained");
 
 var Utils = {};
 module.exports = Utils;
@@ -107,7 +108,7 @@ Utils.readMessage = function(messageId, token, cb) {
     }
 
     // Retreive text for message id
-    debug("requesting message details for id: " + messageId);
+    fine("requesting message details for id: " + messageId);
     var options = {
                     'method': 'GET',
                     'hostname': 'api.ciscospark.com',
@@ -146,7 +147,7 @@ Utils.readMessage = function(messageId, token, cb) {
             }
 
             // Robustify
-            debug("parsing JSON");
+            fine("parsing JSON");
             var message = JSON.parse(Buffer.concat(chunks));
             debug("JSON parsed: " + JSON.stringify(message));
             if (!checkMessageDetails(message)) {
@@ -155,7 +156,7 @@ Utils.readMessage = function(messageId, token, cb) {
                 return;
             }
 
-            debug("pushing message details to callback function");
+            fine("pushing message details to callback function");
             cb(null, message);
         });
     });

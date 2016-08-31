@@ -2,7 +2,7 @@
 var https = require("https");
 var htmlparser = require("htmlparser2");
 
-var debug = require("debug")("sparkbot-commands");
+var debug = require("debug")("sparkbot-interpreter");
 var fine = require("debug")("fine-grained");
 
 
@@ -92,7 +92,7 @@ CommandInterpreter.prototype.extract = function (message, cb) {
     // Note: this makes sense only if this is a bot account
     var text = message.text;
     if  ((this.accountType == "machine") && this.trimMention) {
-        debug("removing bot mention if present");
+        debug("removing bot mention if present in: " + text);
         text = trimMention(this.person, message);
     }
 

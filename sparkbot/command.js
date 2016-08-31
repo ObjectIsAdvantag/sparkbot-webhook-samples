@@ -1,7 +1,9 @@
 
 var https = require("https");
+var htmlparser = require("htmlparser2");
 
 var debug = require("debug")("sparkbot-commands");
+var fine = require("debug")("fine-grained");
 
 
 
@@ -26,7 +28,6 @@ function Interpreter(config) {
             return;
         }
 
-        debug("recording bot account info, account: " + account + ", id: " + people.id);
 		self.accountType = account;
 		self.person = people;
 	});
@@ -34,6 +35,46 @@ function Interpreter(config) {
     this.trimMention = config.trimMention;
     this.prefix = config.commandPrefix;
     this.ignoreSelf = config.ignoreSelf;
+}
+
+
+// Return a string in which webhook mentions are removed
+// Note : we need to start from the HTML text as it only includes mentions for sure. In practice, the plain text message may include a nickname 
+function trimMention(person, message) {
+    var buffer = "";
+    var skip = 0;
+    var group = 0;      
+    var parser = new htmlparser.Parser({
+        onopentag: function(tagname, attribs){
+            fine("opening brace name: " + tagname + ", with args: " + JSON.stringify(attribs));
+            if (tagname === "spark-mention") {
+                if (attribs["data-object-type"]=="person" && attribs["data-object-id"]== person.id ) {
+                        skip++; // to skip next text as bot was mentionned
+                }
+            }
+        },
+        ontext: function(text){
+            if (!skip) {
+                fine("appending: " + text);
+                if (group > 0) {
+                    buffer += " ";
+                }
+                buffer += text.trim();
+                group++;
+            }
+            else {
+                skip--; // skipped, let's continue HTML parsing in case other bot mentions appear
+                group = 0;
+            }
+        },
+        onclosetag: function(tagname){
+             fine("closing brace name: " + tagname);
+        }
+    }, {decodeEntities: true});
+    parser.parseComplete(message.html);
+
+    debug("trimed: " + buffer);
+    return buffer;
 }
 
 
@@ -47,24 +88,32 @@ Interpreter.prototype.extract = function (trigger, message, cb) {
         return;
     }
 
-    // [TODO] Remove bot mention
+    // Remove mention 
+    // Note: this makes sense only if this is a bot account
+    var text = message.text;
+    if  ((this.accountType == "machine") && this.trimMention) {
+        debug("removing bot mention if present");
+        text = trimMention(this.person, message);
+    }
 
+    // Remove extra whitespaces
+    text = text.replace( /\s\s+/g, " ");
 
     // If the message does not contain any text, simply ignore it
     // GTK: happens in case of a pure file attachement for example
-    if (!message.text) {
+    if (!text) {
         debug("no text in message => ignoring");
         return;
     }
 
     // If it is not a command, ignore it
-    if (this.prefix && (this.prefix != message.text.charAt(0))) {
+    if (this.prefix && (this.prefix != text.charAt(0))) {
         debug("text does not start with the command prefix: " + this.prefix + " => ignoring...");
         return;
     }
 
     // Extract command
-    var splitted = message.text.substring(1).split(' ');
+    var splitted = text.substring(1).split(' ');
     var keyword = splitted[0];
     if (!keyword) {
         debug("empty command, ignoring");

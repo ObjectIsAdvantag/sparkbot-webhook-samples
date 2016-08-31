@@ -250,6 +250,7 @@ Webhook.prototype.processNewMessage = function(cb) {
 		Utils.readMessage(trigger.data.id, token, function (err, message) {
 			if (err) {
 				cb (err, trigger, null);
+				return;
 			}
 			cb(null, trigger, message);
 		});

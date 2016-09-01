@@ -1,5 +1,5 @@
 /* 
- * a minimalist Cisco Spark webhook based on Express.js
+ * a Cisco Spark webhook based on pure Express.js, illustrates an approach with no bot libray 
  */
 
 var express = require("express");
@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 var debug = require("debug")("samples");
-var Utils = require("./sparkbot/utils");
+var Utils = require("../sparkbot/utils");
 
 
 var started = Date.now();
@@ -20,7 +20,7 @@ app.route("/")
         res.json({
             message: "Congrats, your Cisco Spark bot is up and running",
             since: new Date(started).toISOString(),
-            code: "minimalist.js",
+            code: "express-all-in-one.js",
             tip: "Register your bot as a WebHook to start receiving events: https://developer.ciscospark.com/endpoint-webhooks-post.html"
         });
     })
@@ -52,8 +52,8 @@ app.route("/")
 var port = process.env.DOCKERIZED_PORT || process.env.PORT || 8080;
 app.listen(port, function () { 
     console.log("Cisco Spark Bot started at http://localhost:" + port + "/");
-    console.log("   GET  / for Health checks");
-    console.log("   POST / receives Spark Webhook events");
+    console.log("   GET  / for health checks");
+    console.log("   POST / to procress new Webhook events");
 });
 
 

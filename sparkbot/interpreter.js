@@ -78,14 +78,15 @@ function trimMention(person, message) {
 }
 
 
-// checks if a command can be extracted, if so, invokes the callback with signature (err, { keyword:"", args:[]})
-// if the text should be ignored, the callback is not invoked. Happens if the bot is writing, or if the specified prefix is not present
-// if  
-CommandInterpreter.prototype.extract = function (message, cb) {
+// checks if a command can be extracted, if so, returns it, and null otherwise.
+// extra features
+//      - can trim bot name when the bot is mentionned
+//      - can filter out messages from bot
+CommandInterpreter.prototype.extract = function (message) {
     // If the message comes from the bot, ignore it
     if (this.ignoreSelf && (message.personId === this.person.id)) {
         debug("bot is writing => ignoring");
-        return;
+        return null;
     }
 
     // Remove mention 
@@ -103,13 +104,13 @@ CommandInterpreter.prototype.extract = function (message, cb) {
     // GTK: happens in case of a pure file attachement for example
     if (!text) {
         debug("no text in message => ignoring");
-        return;
+        return null;
     }
 
     // If it is not a command, ignore it
     if (this.prefix && (this.prefix != text.charAt(0))) {
         debug("text does not start with the command prefix: " + this.prefix + " => ignoring...");
-        return;
+        return null;
     }
 
     // Extract command
@@ -117,14 +118,13 @@ CommandInterpreter.prototype.extract = function (message, cb) {
     var keyword = splitted[0];
     if (!keyword) {
         debug("empty command, ignoring");
-        cb({ "keyword":"", "args":[]});
-        return;        
+        return null;        
     }
-    debug("detected command: " + keyword);
-
-    // Remove leading command and return 
     splitted.shift();
-    cb(null, { "keyword": keyword, "args": splitted, "message":message });
+
+    var command = { "keyword": keyword, "args": splitted, "message":message };
+    debug("detected command: " + command.keyword + ", with args: " + JSON.stringify(command.args) + ", in message: " + command.message.id);
+    return command;
 }
 
 

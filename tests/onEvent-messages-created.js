@@ -5,18 +5,18 @@
  *  
  */
 
-var SparkBot = require("./sparkbot/webhook");
+var SparkBot = require("../sparkbot/webhook");
 
 // Starts your Webhook with default configuration where the SPARK API access token is read from the SPARK_TOKEN env variable 
 var bot = new SparkBot();
 
-bot.on('messages', 'created', function(trigger) {
+bot.onEvent('messages', 'created', function(trigger) {
   console.log("new message from: " + trigger.data.personEmail + ", in room: " + trigger.data.roomId);
   
   bot.decryptMessage(trigger, function (err, message) {
 
     if (err) {
-      console.log("could not fetch message, err: " + err.message); 
+      console.log("could not fetch message contents, err: " + err.message); 
       return;
     }
 

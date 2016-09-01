@@ -3,12 +3,12 @@
  *
  */
 
-var SparkBot = require("./sparkbot/webhook");
+var SparkBot = require("../sparkbot/webhook");
 
 // Leverage a simple webhook framework
 var bot = new SparkBot();
  
-bot.on("all", "all", function(trigger) {
+bot.onEvent("all", "all", function(trigger) {
   
     //
     // YOUR CODE HERE

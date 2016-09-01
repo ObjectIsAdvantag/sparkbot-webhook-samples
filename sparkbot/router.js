@@ -6,7 +6,6 @@ var fine = require("debug")("fine-grained");
 /*
  * Listener to new (messages/created) Webhook events which does routing based on command keyword
  */
-
 function CommandRouter(webhook) {
     this.commands = {};
     
@@ -18,28 +17,22 @@ function CommandRouter(webhook) {
     this.webhook = webhook;
 
     var self = this;
-    webhook.processNewMessage(function(err, trigger, message) {
-        if (err) {
-            debug("could not read new message, err: " + err.message); 
+    webhook.onMessage(function(trigger, message) {
+        var command = webhook.asCommand(message);
+        if (!command || !command.keyword) {
+            debug("could not interpret message as a command, aborting..."); 
+            return;
+        }
+            
+        fine("new command: " + command.keyword + ", with args: " + JSON.stringify(command.args));
+        var listener = self.commands[command.keyword];
+        if (!listener) {
+            fine("no listener for command: " + command.keyword + ", aborting...");
             return;
         }
 
-        webhook.interpretAsCommand(message, function (err, command) {
-            if (err) {
-                debug("could not interpret message as a command, err: " + err.message); 
-                return;
-            }
-            
-            fine("new command: " + command.keyword + ", with args: " + JSON.stringify(command.args));
-            var listener = self.commands[command.keyword];
-            if (!listener) {
-                fine("command: " + command.keyword + " is not registered, aborting...");
-                return;
-            }
-
-            debug("firing new command: " + command.keyword);
-            listener(null, command);
-        });
+        debug("firing new command: " + command.keyword);
+        listener(command);
     });
 }
 

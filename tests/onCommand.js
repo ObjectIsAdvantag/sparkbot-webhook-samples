@@ -5,17 +5,12 @@
  *  
  */
 
-var SparkBot = require("./sparkbot/webhook");
+var SparkBot = require("../sparkbot/webhook");
 
 // Starts your Webhook with default configuration where the SPARK API access token is read from the SPARK_TOKEN env variable 
 var bot = new SparkBot();
  
-bot.onCommand("help", function(err, command) {
- 
-  if (err) {
-      console.log("could not process new command, err: " + err.message); 
-      return;
-  }
+bot.onCommand("help", function(command) {
 
   //
   // ADD YOUR CUSTOM CODE HERE

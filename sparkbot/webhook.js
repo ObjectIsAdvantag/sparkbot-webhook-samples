@@ -136,7 +136,7 @@ function Webhook(config) {
 
 
 // Registers a listener for new (resource, event) POSTed to our webhook   
-Webhook.prototype.on = function(resource, event, listener) {
+Webhook.prototype.onEvent = function(resource, event, listener) {
 	if (!listener) {
 		debug("on: listener registration error. Please specify a listener for resource/event");
 		return;
@@ -238,46 +238,48 @@ Webhook.prototype.decryptMessage = function(trigger, cb) {
 }
 
 
-// Shortcut to be notified only as new messages are posted into Spark rooms your Webhook has registered against.
+// Shortcut to be notified only as new messages are posted into Spark rooms against which your Webhook has registered.
 // The callback function will directly receive the message contents : combines .on('messages', 'created', ...) and .decryptMessage(...).
+// The listener fails is no 
 // Expected callback function signature (err, trigger, message).
-Webhook.prototype.processNewMessage = function(cb) {
-	var token = this.token;
-	addMessagesCreatedListener(this, function(trigger) {
-		if (!token) {
-			debug("no Spark token configured, cannot read message details.")
-			cb(new Error("no Spark token configured, cannot decrypt message"), trigger, null);
-			return;
-		}
+Webhook.prototype.onMessage = function(cb) {
 
+	// check args
+	if (!cb) {
+		debug("no callback function, aborting listener registration...")
+		return;
+	}
+
+	// Abort if webhook cannot request Spark for messages details
+	var token = this.token;
+	if (!token) {
+		debug("no Spark token specified, cannot read message details, aborting listener registration...")
+		return;
+	}
+
+	addMessagesCreatedListener(this, function(trigger) {
 		Utils.readMessage(trigger.data.id, token, function (err, message) {
 			if (err) {
-				cb (err, trigger, null);
+				debug("could not fetch message details, err: " + JSON.stringify(err) + ", listener not fired...");
+				//cb (err, trigger, null);
 				return;
 			}
-			cb(null, trigger, message);
+
+			// Fire listener
+			cb(trigger, message);
 		});
 	});
 }
 
 
-// This function tries to interpret the triggered Webhook (resource/event) as a command,
-// and invokes the specified callback if successful
-Webhook.prototype.interpretAsCommand = function(message, cb) {
-	if (!message || !cb) {
-		debug("wrong arguments for extractCommand, aborting...")
-		return;
+// Transforms a message into a Command structure
+Webhook.prototype.asCommand = function(message) {
+	if (!message) {
+		debug("no message to interpret, aborting...")
+		return null;
 	}
 
-	this.interpreter.extract(message, function(err, command) {
-		if (err) {
-			debug("error while extracting command, err: " + JSON.stringify(err));
-			cb (err, null);
-			return;
-		}
-
-		cb(null, command);
-	});
+	return this.interpreter.extract(message);
 }
 
 
@@ -287,7 +289,7 @@ Webhook.prototype.interpretAsCommand = function(message, cb) {
 // Expected callback function signature (err, command).
 Webhook.prototype.onCommand = function(command, cb) {
 	if (!command || !cb) {
-		debug("wrong arguments for onCommand, aborting...")
+		debug("wrong arguments for .onCommand, aborting...")
 		return;
 	}
 

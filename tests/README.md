@@ -1,4 +1,6 @@
-# Webhook Samples 
+# Sparkbot Library Tests
+
+A set of samples to test the Sparkbot library features. 
 
 
 - [express-all-in-one](express-all-in-one.js): a simple HTTP service based on Express, listening to incoming WebHook Resource/Events

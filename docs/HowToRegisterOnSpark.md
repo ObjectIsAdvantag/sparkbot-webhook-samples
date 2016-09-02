@@ -1,6 +1,6 @@
-# Register your bot on Cisco Spark
+# How to Guide: connect your bot to Cisco Spark
 
-This guide details how to make your local bot talk to Spark Cloud Service.
+This guide details how to have your local bot (ie, running on a dev machine or a private network), talk to the Spark Cloud Service.
 
 1. Start you bot
 2. Check your bot is healthy 

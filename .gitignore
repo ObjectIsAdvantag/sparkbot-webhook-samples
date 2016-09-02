@@ -4,4 +4,4 @@ npm-debug.log
 
 # IDE
 .idea/
-.code/
+.vscode/

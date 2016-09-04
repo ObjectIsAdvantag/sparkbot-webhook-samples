@@ -1,9 +1,13 @@
-docs/
-node_modules/
-.dockerignore
+.vscode
 .gitignore
+.dockerignore
 Dockerfile
-LICENSE
+
+docs/
+
 Makefile
 package.json
+node_modules/
+
+
 *.md

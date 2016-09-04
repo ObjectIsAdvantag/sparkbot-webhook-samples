@@ -13,11 +13,13 @@ var debug = require("debug")("samples");
 var SparkBot = require("../sparkbot/webhook");
 var bot = new SparkBot();
 
-// do not listen to ourselves 
-bot.interpreter.ignoreSelf = true;
+// do not listen to ourselves
+// comment if you're running the bot from your Developer access token and you want to invoke in a test room
+//bot.interpreter.ignoreSelf = true; 
 
 var SparkClient = require("node-sparky");
 var spark = new SparkClient({ token: process.env.SPARK_TOKEN });
+
 
 bot.onCommand("help", function (command) {
     spark.messageSendRoom(command.message.roomId, {
@@ -99,6 +101,7 @@ bot.onCommand("stats", function (command) {
 
 });
 
+
 bot.onEvent("memberships", "created", function (trigger) {
     var newMembership = trigger.data; // see specs here: https://developer.ciscospark.com/endpoint-memberships-get.html
     if (newMembership.personId == bot.interpreter.person.id) {
@@ -116,8 +119,6 @@ bot.onEvent("memberships", "created", function (trigger) {
             .catch(function (err) {
                 console.log(err);
             });
-
-
     }
 });
 

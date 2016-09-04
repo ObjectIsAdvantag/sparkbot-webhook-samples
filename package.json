@@ -1,8 +1,8 @@
 {
-  "name": "sparkbot-webhook-sample-node",
+  "name": "sparkbot-webhook",
   "version": "v0.1.0",
-  "description": "Bootstraps a Cisco Spark webhook using minimal requirements (NodeJS, Express)",
-  "main": "process-new-messages.js",
+  "description": "Library to create Cisco Spark Webhooks in nodejs,  with easy to add Bot Commands",
+  "main": "index.js",
   "keywords": [
     "SparkBot",
     "CiscoSpark",
@@ -10,6 +10,11 @@
     "NodeJS",
     "Express"
   ],
+  "homepage": "https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples.git"
+  },
   "author": "Stève Sfartz",
   "license": "MIT",
   "dependencies": {

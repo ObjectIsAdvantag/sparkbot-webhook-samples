@@ -1,17 +1,5 @@
 {
-  "name": "sparkbot-webhook-sample-node",
-  "version": "v0.1.0",
-  "description": "Bootstraps a Cisco Spark webhook using minimal requirements (NodeJS, Express)",
-  "main": "process-new-messages.js",
-  "keywords": [
-    "SparkBot",
-    "CiscoSpark",
-    "Webhook",
-    "NodeJS",
-    "Express"
-  ],
-  "author": "Stève Sfartz",
-  "license": "MIT",
+  "main": "express-all-in-one.js",
   "dependencies": {
     "body-parser": "^1.15.0",
     "debug": "^2.2.0",

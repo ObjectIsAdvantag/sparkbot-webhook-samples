@@ -39,7 +39,7 @@ bot.onCommand("stats", function (command) {
 
     // As computing stats takes time, let's acknowledge we received the order
     spark.messageSendRoom(command.message.roomId, {
-        markdown: "heard you ! now computing stats among last " + max + " messages..."
+        markdown: "_heard you ! now computing stats among last " + max + " messages..._"
     });
 
     // Build a map of participations by participant email
@@ -82,12 +82,16 @@ bot.onCommand("stats", function (command) {
                     });
                     break;
                 default:
-                    var stats = "**kudos to the top " + limit + " participants**";
+                    var stats = "**kudos to the top participants**";
                     for (var i = 0; i < limit; i++) {
                         var email = top[i];
                         var number = participants[email];
                         var pourcentage = Math.round(number * 100 / totalMessages);
-                        stats += "\n\n" + (i + 1) + ". <@personEmail:" + email + ">, " + pourcentage + "% (" + number + ")";
+
+                        // Display only relevant contributors
+                        if (pourcentage >= 2) {
+                            stats += "\n\n" + (i + 1) + ". <@personEmail:" + email + ">, " + pourcentage + "% (" + number + ")";
+                        }
                     }
                     spark.messageSendRoom(command.message.roomId, {
                         markdown: stats

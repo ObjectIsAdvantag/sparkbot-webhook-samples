@@ -1,8 +1,8 @@
 
 var https = require("https");
 
-var debug = require("debug")("sparkbot-utils");
-var fine = require("debug")("fine-grained");
+var debug = require("debug")("sparkbot:utils");
+var fine = require("debug")("sparkbot:utils:fine");
 
 var Utils = {};
 module.exports = Utils;

@@ -1,6 +1,6 @@
 
-var debug = require("debug")("sparkbot-router");
-var fine = require("debug")("fine-grained");
+var debug = require("debug")("sparkbot:router");
+var fine = require("debug")("sparkbot:router:fine");
 
 
 /*
@@ -27,7 +27,14 @@ function CommandRouter(webhook) {
         fine("new command: " + command.keyword + ", with args: " + JSON.stringify(command.args));
         var listener = self.commands[command.keyword];
         if (!listener) {
-            fine("no listener for command: " + command.keyword + ", aborting...");
+            fine("no listener for command: " + command.keyword);
+
+            // Looking for a fallback listener 
+            listener = self.commands["fallback"];
+            if (listener) {
+                debug("found fallback listener => invoking");
+                listener(command);
+            }
             return;
         }
 

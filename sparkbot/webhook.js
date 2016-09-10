@@ -6,6 +6,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 var debug = require("debug")("sparkbot");
+var fine = require("debug")("sparkbot:fine");
 
 var Utils = require("./utils");
 var CommandInterpreter = require("./interpreter");
@@ -286,7 +287,8 @@ Webhook.prototype.asCommand = function(message) {
 
 // Shortcut to be notified only as new commands are posted into Spark rooms your Webhook has registered against.
 // The callback function will directly receive the message contents : combines .on('messages', 'created', ...)  .decryptMessage(...) and .extractCommand(...).
-// Expected callback function signature (err, command).
+// The expected callback function signature is: function(err, command).
+// Note that you may register a "fallback" listener by registering the "fallback" command
 Webhook.prototype.onCommand = function(command, cb) {
 	if (!command || !cb) {
 		debug("wrong arguments for .onCommand, aborting...")

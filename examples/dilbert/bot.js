@@ -24,58 +24,60 @@ var Dilbert = require("./util.js");
 //
 // HELP COMMAND
 //
-function showHelp(roomId) {
-    spark.messageSendRoom(roomId, {
-        markdown: "_I am the Dilbert bot, can send you comics from [Dilbert Strip](http://dilbert.com/strip/):_\n\n- /help\n\n- /today [YYYY-MM-DD]"
-    });
-}
 bot.onCommand("help", function (command) {
     showHelp(command.message.roomId);
 });
+bot.onCommand("fallback", function (command) {
+    // so happy to join
+    spark.messageSendRoom(command.message.roomId, {
+        text: "sorry, I did not understand"
+    })
+        .then(function (message) {
+            // show how to use
+            showHelp(command.message.roomId);
+        });
+});
+
+function showHelp(roomId) {
+    spark.messageSendRoom(roomId, {
+        markdown: "I am the Dilbert bot, can send comics from [Dilbert Strip](http://dilbert.com/strip/):\n\n- /help\n\n- /strip [YYYY-MM-DD]\n\n- note that I wake up in Group rooms only when mentionned"
+    });
+}
 
 
 //
 // TODAY COMMAND
 //
-bot.onCommand("today", function (command) {
-
-    // [TODO] Get Data parameter
-    var date = command.args[0];
-    if (!date) {
-        date = "2016-09-01";
-    }
+bot.onCommand("strip", function (command) {
 
     // As computing stats takes time, let's acknowledge we received the order
     spark.messageSendRoom(command.message.roomId, {
         markdown: "heard you ! now calling dilbert..."
     })
-    .then(function (messages) { 
+        .then(function (messages) {
 
-        // Show comics
-        showDilbert(command.message.roomId, date);
-    });
-});
+            // Show comics
+            var date = command.args[0];
+            if (!date) {
+                date = "";
+            }
+            Dilbert.stripForDay(date, function (err, dilbert) {
+                if (err) {
+                    debug("could not extract dilbert data for day: " + date + ", err: " + JSON.stringify(err));
+                    spark.messageSendRoom(command.message.roomId, {
+                        "markdown": "sorry, I am not in a very mood right now, check out [Dilbert Strip](http://dilbert.com/strip/)."
+                    });
+                    return;
+                }
 
-
-// Input day must be in YYYY-MM-DD format
-function showDilbert(roomId, day) {
-
-    Dilbert.dilbertForDay(day, function (err, dilbert) {
-        if (err) {
-            debug("could not extract dilbert data for day: " + day + ", err: " + JSON.stringify(err));
-            spark.messageSendRoom(roomId, {
-                "markdown": "sorry, I am not in a mood now, check out [Dilbert Strip](http://dilbert.com/strip/)."
+                debug("successfully fetched data: " + JSON.stringify(dilbert));
+                spark.messageSendRoom(command.message.roomId, {
+                    "files": [dilbert.image],
+                    "text": dilbert.url
+                });
             });
-            return;
-        }
-
-        debug("found: " + JSON.stringify(dilbert));
-        spark.messageSendRoom(roomId, {
-            "files": [dilbert.image],
-            "text": dilbert.url
         });
-    });
-}
+});
 
 
 //
@@ -84,18 +86,15 @@ function showDilbert(roomId, day) {
 bot.onEvent("memberships", "created", function (trigger) {
     var newMembership = trigger.data; // see specs here: https://developer.ciscospark.com/endpoint-memberships-get.html
     if (bot.interpreter.person && (bot.interpreter.person.id === newMembership.personId)) {
-        debug("bot's just added to room: " + trigger.data.roomId);
+        debug("bot added to room: " + trigger.data.roomId + ", shooting welcome message");
 
         // so happy to join
         spark.messageSendRoom(trigger.data.roomId, {
-            text: "Hi, I am so happy to join !"
+            text: "Hi, so happy to join this room !"
         })
             .then(function (message) {
                 // show how to use
-                showHelp(command.message.roomId);
-            })
-            .catch(function (err) {
-                debug("Could not send welcome message, err: " + JSON.stringify(err));
+                showHelp(trigger.data.roomId);
             });
     }
 });

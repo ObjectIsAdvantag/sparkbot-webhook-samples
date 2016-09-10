@@ -9,12 +9,12 @@
 var http = require("http");
 var htmlparser = require("htmlparser2");
 
-var debug = require("debug")("dilbert");
-var fine = require("debug")("dilbert:fine");
+var debug = require("debug")("samples");
+var fine = require("debug")("samples:fine");
 
 
-// Extract the dilbert tag from URL
-function extractDilbertTag(html, cb) {
+// Extracts the dilbert strip data from URL
+function extract(html, cb) {
   var found = false;
   var parser = new htmlparser.Parser({
     onopentag: function (tagname, attribs) {
@@ -47,16 +47,50 @@ function extractDilbertTag(html, cb) {
 }
 
 
-module.exports.dilbertForDay = function (day, cb) {
-  // Check day format
-  var ok = day.match(/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/);
-  if (!ok) {
-    debug("not valid date format YYYY-MM-DD for: " + day);
-    cb(new Error("not valid date format YYYY-MM-DD for: " + day), null);
-    return;
-  }
-  // [TODO] check date is not in future
+// Returns date in YYYY-MM-DD format
+function toYYYMMDD(date) {
+  var year = date.getFullYear();
 
+  var month = date.getMonth() + 1;
+  month = (month < 10 ? "0" : "") + month;
+
+  var day = date.getDate();
+  day = (day < 10 ? "0" : "") + day;
+
+  return year + "-" + month + "-" + day;
+}
+
+
+// Returns false if specified date is not in a valid range
+function checkRange(date) {
+  // TODO : not implemented yet
+  return true;
+}
+
+
+module.exports.stripForDay = function (day, cb) {
+  
+  // Robustify: check date if valid
+  if (day) {
+    // YYYY-MM-DD format
+    var ok = day.match(/^(\d{4})[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/);
+    if (!ok) {
+      debug("not valid date format YYYY-MM-DD for: " + day);
+      cb(new Error("not valid date format YYYY-MM-DD for: " + day), null);
+      return;
+    }
+
+    if (!checkRange(ok)) {
+      debug("specified date does not comply to dilbert range: " + day);
+      cb(new Error("date: " + day + " does not comply with Dilbert Strip range: "), null);
+      return;
+    }
+  }
+  else {
+    // Invoke Dilbert strip for today
+    day = toYYYMMDD(new Date());
+  }
+  
   // Parse img from Dilbert strip
   http.get("http://dilbert.com/strip/" + day, function (response) {
 
@@ -67,10 +101,10 @@ module.exports.dilbertForDay = function (day, cb) {
 
     response.on('end', function (chunk) {
 
-      extractDilbertTag(data, function (err, dilbert) {
+      extract(data, function (err, dilbert) {
         if (err) {
-          debug("could not extract dilbert data from: " + url);
-          cb("could not extract dilbert data from: " + url, null);
+          debug("could not extract data from: " + url);
+          cb("could not extract data from: " + url, null);
           return;
         }
 

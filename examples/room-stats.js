@@ -9,6 +9,7 @@
 // Starts your Webhook with default configuration where the SPARK API access token is read from the SPARK_TOKEN env variable 
 
 var debug = require("debug")("samples");
+var fine = require("debug")("samples:fine");
 
 var SparkBot = require("../sparkbot/webhook");
 var bot = new SparkBot();
@@ -82,7 +83,7 @@ bot.onCommand("stats", function (command) {
                     break;
                 default:
                     var stats = "**kudos to the top " + limit + " participants**";
-                    for (i = 0; i < limit; i++) {
+                    for (var i = 0; i < limit; i++) {
                         var email = top[i];
                         var number = participants[email];
                         var pourcentage = Math.round(number * 100 / totalMessages);

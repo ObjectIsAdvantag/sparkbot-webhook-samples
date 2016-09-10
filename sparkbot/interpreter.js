@@ -2,8 +2,8 @@
 var https = require("https");
 var htmlparser = require("htmlparser2");
 
-var debug = require("debug")("sparkbot-interpreter");
-var fine = require("debug")("fine-grained");
+var debug = require("debug")("sparkbot:interpreter");
+var fine = require("debug")("sparkbot:interpreter:fine");
 
 
 

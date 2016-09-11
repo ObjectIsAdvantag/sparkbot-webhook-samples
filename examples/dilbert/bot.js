@@ -40,7 +40,7 @@ bot.onCommand("fallback", function (command) {
 
 function showHelp(roomId) {
     spark.messageSendRoom(roomId, {
-        markdown: "I am the Dilbert bot, can send comics from [Dilbert Strip](http://dilbert.com/strip/):\n\n- /help\n\n- /strip [YYYY-MM-DD]\n\n- note that I wake up in Group rooms only when mentionned"
+        markdown: "I am the Dilbert bot, can send comics from [Dilbert Strip](http://dilbert.com/strip/):\n\n- /help\n\n- /strip [YYYY-MM-DD]\n\n**Note that - in Group rooms - I wake up only when mentionned.**"
     });
 }
 

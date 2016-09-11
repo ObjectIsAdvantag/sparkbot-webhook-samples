@@ -8,12 +8,20 @@ To run any of these examples, follow the [How to run on Cloud9](docs/HowToRunOnC
 The examples below leverage the [sparkbot-webhook](sparkbot) NodeJS library.  
 To learn more about the library, check the [tests](tests/README.md) examples.
 
+## [inspect](examples/inspector.js)
+
+Provides instant access to Cisco Spark technical data.
+
+Tip: Run this webhook with a Developer or Bot Account access token.
+
+Add _inspect@sparkbot.io_ to experiment this bot.
+
 
 ## [room-stats](examples/room-stats.js)
 
 Computes stats for the room it is invoked from. 
 
-Tip: Run this webhook with a Developer token (either your or a fake spark account).
+Tip: Run this webhook with a Developer token (either you or a fake spark account) as the code needs to access all past messages from the room.
 
 
 ## [dilbert](examples/dilbert/bots.js)

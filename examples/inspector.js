@@ -1,5 +1,5 @@
 /* 
- * a Cisco Spark bot that gives you quick access to spark technical data
+ * a bot that gives you instant access to Cisco Spark technical data
  * 
  * note : this example can work with any type of spark token (from a developer or bot account)
  *  

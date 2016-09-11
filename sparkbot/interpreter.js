@@ -89,10 +89,9 @@ CommandInterpreter.prototype.extract = function (message) {
         return null;
     }
 
-    // Remove mention 
-    // Note: this makes sense only if this is a bot account
+    // Remove mention if we are running a bot account and part of a group room
     var text = message.text;
-    if  ((this.accountType == "machine") && this.trimMention) {
+    if  ((message.roomType == "group") && (this.accountType == "machine") && this.trimMention) {
         debug("removing bot mention if present in: " + text);
         text = trimMention(this.person, message);
     }

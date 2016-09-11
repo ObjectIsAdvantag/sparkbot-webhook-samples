@@ -1,8 +1,8 @@
-
 /* 
- * a Sparkbot that shows stats for a Spark room
+ * a Cisco Spark bot that computes stats for a room
  * 
- * note : this example requires that you've set a SPARK_TOKEN env variable 
+ * note : this example requires you set up a SPARK_TOKEN env variable for a real account (not a bot account), 
+ *     as this code reads past messages in the room 
  *  
  */
 
@@ -24,7 +24,7 @@ var spark = new SparkClient({ token: process.env.SPARK_TOKEN });
 
 bot.onCommand("help", function (command) {
     spark.messageSendRoom(command.message.roomId, {
-        markdown: "_I am all about Stats for your Spark rooms_\n\n- /help\n\n- /stats [#messages]"
+        markdown: "I am all about Stats for your Spark rooms\n\n- /help\n\n- /stats [#messages] : computes stats from past messages, defaults to 100"
     });
 });
 
@@ -39,7 +39,7 @@ bot.onCommand("stats", function (command) {
 
     // As computing stats takes time, let's acknowledge we received the order
     spark.messageSendRoom(command.message.roomId, {
-        markdown: "_heard you ! now computing stats among last " + max + " messages..._"
+        markdown: "_heard you ! now computing stats from past " + max + " messages..._"
     });
 
     // Build a map of participations by participant email

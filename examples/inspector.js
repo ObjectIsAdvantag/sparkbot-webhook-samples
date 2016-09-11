@@ -53,15 +53,42 @@ bot.onEvent("memberships", "created", function (trigger) {
                     spark.messageSendRoom(message.roomId, {
                         markdown: "**Note that - in Group rooms - I wake up only when mentionned.**"
                     })
-                    .then(function (message) {
-                        showHelp(message.roomId);
-                    }); 
+                        .then(function (message) {
+                            showHelp(message.roomId);
+                        });
                 }
                 else {
                     showHelp(message.roomId);
                 }
             });
     }
+});
+
+
+
+bot.onCommand("whoami", function (command) {
+    spark.messageSendRoom(command.message.roomId, {
+        markdown: "personId: " + command.message.personId + "\n\nemail: " + command.message.personEmail
+    });
+});
+
+
+bot.onCommand("whois", function (command) {
+    // Check usage
+    if (command.message.mentionedPeople.length != 2) {
+        spark.messageSendRoom(command.message.roomId, {
+            markdown: "sorry, I cannot proceed if you do not mention a room participant"
+        });
+        return;
+    }
+
+    var participant = command.message.mentionedPeople[1];
+
+    spark.personGet(participant).then(function (person) {
+        spark.messageSendRoom(command.message.roomId, {
+            markdown: "personId: " + person.id + "\n\ndisplayName: " + person.displayName + "\n\nemail: " + person.emails[0]
+        });
+    });
 });
 
 

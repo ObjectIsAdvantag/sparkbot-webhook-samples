@@ -41,7 +41,9 @@ function Webhook(config) {
 	if (!config) {
 		debug("webhook instantiated with default configuration");
 		config = {
-			port 			: process.env.PORT || 8080,
+			// [WORKAROUND] in some container situation (ie, Cisco Shipped), we need to use an OVERRIDE_PORT to force our bot to start and listen to the port defined in the Dockerfile (ie, EXPOSE), 
+			// and not the PORT dynamically assigned by the host or scheduler.
+			port 			: process.env.OVERRIDE_PORT || process.env.PORT || 8080,
 			path			: process.env.WEBHOOK_URL || "/",
 			token			: process.env.SPARK_TOKEN,
 			trimMention	 	: true,

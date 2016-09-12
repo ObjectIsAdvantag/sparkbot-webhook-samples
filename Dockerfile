@@ -28,4 +28,4 @@ USER node
 ENV HOME /home/node
 
 # Run default sample
-CMD ["node", "examples/room-stats.js"]
+CMD ["node", "examples/inspector.js"]

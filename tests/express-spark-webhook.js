@@ -1,5 +1,8 @@
 /* 
- * a Cisco Spark webhook based on pure Express.js, illustrates an approach with no bot libray 
+ * a Cisco Spark webhook based on pure Express.js.
+ * 
+ * goal here is to illustrate how to create a bot without any library
+ *
  */
 
 var express = require("express");
@@ -45,11 +48,11 @@ app.route("/")
     });
 
 
-// starts the Bot service
+// Starts the Bot service
 //
-//    [DO NOT REMOVE] when dockerized, we require DOCKERIZED_PORT prevalence to ensure our app listens on the Dockerfile's EXPOSEd port, 
-//    and not the dynamic PORT assigned by the host.
-var port = process.env.DOCKERIZED_PORT || process.env.PORT || 8080;
+// [WORKAROUND] in some container situation (ie, Cisco Shipped), we need to use an OVERRIDE_PORT to force our bot to start and listen to the port defined in the Dockerfile (ie, EXPOSE), 
+// and not the PORT dynamically assigned by the host or scheduler.
+var port = process.env.OVERRIDE_PORT || process.env.PORT || 8080;
 app.listen(port, function () { 
     console.log("Cisco Spark Bot started at http://localhost:" + port + "/");
     console.log("   GET  / for health checks");

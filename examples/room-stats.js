@@ -50,12 +50,16 @@ bot.onCommand("stats", function (command) {
             // Process messages 
             messages.forEach(function (message) {
                 totalMessages++;
-                var current = participants[message.personEmail];
-                if (!current) {
-                    participants[message.personEmail] = 1;
-                }
-                else {
-                    participants[message.personEmail] = current + 1;
+
+                // [WORKAROUND] Remove incoming integrations as they are not supported in mentions
+                if (!isIncomingIntegration(message)) {
+                    var current = participants[message.personEmail];
+                    if (!current) {
+                        participants[message.personEmail] = 1;
+                    }
+                    else {
+                        participants[message.personEmail] = current + 1;
+                    }
                 }
             });
 
@@ -98,10 +102,6 @@ bot.onCommand("stats", function (command) {
                     });
                     break;
             }
-        })
-        .catch(function (err) {
-            // process error
-            console.log(err);
         });
 
 });
@@ -118,14 +118,21 @@ bot.onEvent("memberships", "created", function (trigger) {
         })
             .then(function (message) {
                 spark.messageSendRoom(trigger.data.roomId, {
-                    markdown: "_I am all about Stats for your Spark rooms_\n\n- /help\n\n- /stats [#messages]"
+                    markdown: "I am all about Stats for your Spark rooms\n\n- /help\n\n- /stats [#messages]"
                 });;
-            })
-            .catch(function (err) {
-                console.log(err);
             });
     }
 });
 
+
+function isIncomingIntegration(message) {
+    var matched = message.personEmail.match(/--\d+@/);
+    if (!matched) {
+        return false;
+    }
+
+    fine("identified as integration: " + message.personEmail);
+    return true;
+}
 
 

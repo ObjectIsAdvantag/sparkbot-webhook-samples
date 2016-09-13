@@ -14,7 +14,7 @@ Provides instant access to Cisco Spark technical data.
 
 Tip: Run this webhook with a Developer or Bot Account access token.
 
-Add _inspect@sparkbot.io_ to experiment this bot.
+Add _inspect@sparkbot.io_ to a Spark Room to experiment this bot.
 
 
 ## [room-stats](examples/room-stats.js)
@@ -24,7 +24,7 @@ Computes stats for the room it is invoked from.
 Tip: Run this webhook with a Developer token (either you or a fake spark account) as the code needs to access all past messages from the room.
 
 
-## [dilbert](examples/dilbert/bots.js)
+## [dilbert](examples/dilbert/bot.js)
 
 Fetches latest comic from Dilbert Strip (with kind invitation to visit the Web Site)
 

@@ -5,11 +5,10 @@
  *  
  */
 
-// Starts your Webhook with default configuration where the SPARK API access token is read from the SPARK_TOKEN env variable 
-
 var debug = require("debug")("samples");
 var fine = require("debug")("samples:fine");
 
+// Starts your Webhook with default configuration where the SPARK API access token is read from the SPARK_TOKEN env variable 
 var SparkBot = require("../sparkbot/webhook");
 var bot = new SparkBot();
 

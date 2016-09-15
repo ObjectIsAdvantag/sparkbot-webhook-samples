@@ -6,16 +6,15 @@
  *  
  */
 
-// Starts your Webhook with default configuration where the SPARK API access token is read from the SPARK_TOKEN env variable 
-
 var debug = require("debug")("samples");
 var fine = require("debug")("samples:fine");
 
+// Starts your Webhook with default configuration where the SPARK API access token is read from the SPARK_TOKEN env variable 
 var SparkBot = require("../sparkbot/webhook");
 var bot = new SparkBot();
 
 // do not listen to ourselves
-// comment if you're running the bot from your Developer access token and you want to invoke in a test room
+// comment the line below if you're running the bot from your Developer access token and you want to invoke in a test room
 //bot.interpreter.ignoreSelf = true; 
 
 var SparkClient = require("node-sparky");

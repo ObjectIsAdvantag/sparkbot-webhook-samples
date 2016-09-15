@@ -22,6 +22,7 @@
     "debug": "^2.2.0",
     "express": "^4.13.4",
     "htmlparser2": "^3.9.1",
-    "node-sparky": "^3.1.17"
+    "node-sparky": "^3.1.17",
+    "request": "^2.74.0"
   }
 }

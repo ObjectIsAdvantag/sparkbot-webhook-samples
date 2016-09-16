@@ -3,7 +3,6 @@
  * 
  */
 
-var request = require("request");
 var debug = require("debug")("samples");
 var fine = require("debug")("samples:fine");
 
@@ -53,7 +52,7 @@ bot.onCommand("next", function (command) {
     if (!limit) limit = 5;
     if (limit < 1) limit = 1;
 
-    fetchNextEvents(limit, function (err, events) {
+    Events.fetchNext(limit, function (err, events) {
         if (err) {
             spark.messageSendRoom(command.message.roomId, {
                  markdown: "**sorry, ball seems broken :-(**"
@@ -64,59 +63,29 @@ bot.onCommand("next", function (command) {
         spark.messageSendRoom(command.message.roomId, {
             markdown: events
         });  
-    })
-
+    });
 });
 
 
 bot.onCommand("now", function (command) {
+    // let's acknowledge we received the order
     spark.messageSendRoom(command.message.roomId, {
-        markdown: "personId: " + command.message.personId + "\n\nemail: " + command.message.personEmail
+        markdown: "_heard you! let's check what's happening now..._"
+    });
+
+    Events.fetchCurrent(function (err, events) {
+        if (err) {
+            spark.messageSendRoom(command.message.roomId, {
+                 markdown: "**sorry, could not contact the organizers :-(**"
+            });
+            return;
+        }
+
+        spark.messageSendRoom(command.message.roomId, {
+            markdown: events
+        });  
     });
 });
 
-
-
-
-function fetchNextEvents(limit, cb) {
-
-    // Get list of upcoming events
-    var options = {
-        method: 'GET',
-        url: "https://devnet-events-api.herokuapp.com/api/v1/events/next?limit=" + limit
-    };
-
-    request(options, function (error, response, body) {
-        if (error) {
-            debug("could not retreive list of events, error: " + error);
-            cb(new Error("Could not retreive upcoming events, sorry [Events API not responding]"), null);
-            return;
-        }
-
-        if ((response < 200) || (response > 299)) {
-            console.log("could not retreive list of events, response: " + response);
-            sparkCallback(new Error("Could not retreive upcoming activities, sorry [bad anwser from Events API]"), null);
-            return;
-        }
-
-        var events = JSON.parse(body);
-        debug("fetched " + events.length + " activities");
-        fine(JSON.stringify(events));
-
-        if (events.length == 0) {
-            cb(null, "**Guess what? No upcoming event!**");
-            return;
-        }
-
-        var nb = events.length;
-        var msg = "**" + nb + " upcoming events:**";
-        for (var i = 0; i < nb; i++) {
-            var current = events[i];
-            msg += "\n- " + current.beginDay + " - " + current.endDay + ": [" + current.name + "](" + current.location + "), " + current.city + " (" + current.country + ")";
-        }
-
-        cb(null, msg);
-    });
-}
 
 

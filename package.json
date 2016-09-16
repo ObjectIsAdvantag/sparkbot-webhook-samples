@@ -1,7 +1,7 @@
 {
   "name": "sparkbot-webhook",
   "version": "v0.1.0",
-  "description": "Library to create Cisco Spark Webhooks in nodejs,  with easy to add Bot Commands",
+  "description": "Library to create Cisco Spark Webhooks in nodejs, with easy to add Bot Commands",
   "main": "index.js",
   "keywords": [
     "SparkBot",

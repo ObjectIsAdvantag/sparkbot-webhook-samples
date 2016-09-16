@@ -28,6 +28,6 @@ USER node
 ENV HOME /home/node
 
 # Run default sample
-#CMD ["node", "examples/devnet/bot.js"]
-CMD ["bash ./scripts/run-example.sh"]
+CMD ["node", "examples/devnet/bot.js"]
+#CMD ["bash", "./scripts/run-example.sh"]
 

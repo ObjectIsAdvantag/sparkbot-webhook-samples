@@ -10,6 +10,9 @@
     "NodeJS",
     "Express"
   ],
+  "scripts": {
+    "start": "scripts/run-example.sh"
+  },
   "homepage": "https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples#readme",
   "repository": {
     "type": "git",

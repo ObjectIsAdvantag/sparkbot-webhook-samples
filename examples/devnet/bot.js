@@ -15,6 +15,13 @@ var SparkClient = require("node-sparky");
 var spark = new SparkClient({ token: process.env.SPARK_TOKEN });
 
 
+bot.onCommand("about", function (command) {
+    spark.messageSendRoom(command.message.roomId, {
+        markdown: "```\n{\n   'author':'Brought to you by Cisco DevNet',\n   'code':'https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples/blob/master/examples/devnet/bot.js',\n   'description':'find next DevNet event coming close to you',\n   'healthcheck':'GET https://heroku/',\n   'webhook':'POST https://heroku/'\n}\n```"
+    });
+});
+
+
 bot.onCommand("fallback", function (command) {
     // so happy to join
     spark.messageSendRoom(command.message.roomId, {
@@ -39,7 +46,7 @@ bot.onCommand("next", function (command) {
 
     // let's acknowledge we received the order
     spark.messageSendRoom(command.message.roomId, {
-        markdown: "_heard you ! asking my crystal ball..._"
+        markdown: "_heard you! asking my crystal ball..._"
     });
 
     var limit = command.args[0];
@@ -49,7 +56,7 @@ bot.onCommand("next", function (command) {
     fetchNextEvents(limit, function (err, events) {
         if (err) {
             spark.messageSendRoom(command.message.roomId, {
-                 markdown: "**sorry, ball looks broken :-(**"
+                 markdown: "**sorry, ball seems broken :-(**"
             });
             return;
         }
@@ -102,10 +109,10 @@ function fetchNextEvents(limit, cb) {
         }
 
         var nb = events.length;
-        var msg = "**Here are the " + nb + " upcoming events:**";
+        var msg = "**" + nb + " upcoming events:**";
         for (var i = 0; i < nb; i++) {
             var current = events[i];
-            msg += "\n- " + current.beginDay + " " + current.beginTime + ": [" + current.name + "](" + current.location +") at " + current.city + " ( " + current.country + ")";
+            msg += "\n- " + current.beginDay + " - " + current.endDay + ": [" + current.name + "](" + current.location + "), " + current.city + " (" + current.country + ")";
         }
 
         cb(null, msg);

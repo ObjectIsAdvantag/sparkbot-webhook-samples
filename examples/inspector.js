@@ -22,7 +22,7 @@ var spark = new SparkClient({ token: process.env.SPARK_TOKEN });
 
 bot.onCommand("about", function (command) {
     spark.messageSendRoom(command.message.roomId, {
-        markdown: "```\n{\n   'author':'Stève Sfartz <stsfartz@cisco.com>',\n   'code':'https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples/blob/master/examples/inspector.js',\n   'description':'an handy tool to reveal spark technical data',\n   'healthcheck':'GET https://sparkbot-inspector-objectisadvantag.c9users.io/',\n   'webhook':'POST https://sparkbot-inspector-objectisadvantag.c9users.io/'\n}\n```"
+        markdown: "```\n{\n   'author':'Stève Sfartz <stsfartz@cisco.com>',\n   'code':'https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples/blob/master/examples/inspector.js',\n   'description':'an handy tool to reveal spark technical data',\n   'healthcheck':'GET https://sparkbot-inspector.herokuapp.com',\n   'webhook':'POST https://sparkbot-inspector.herokuapp.com'\n}\n```"
     });
 });
 

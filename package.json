@@ -11,7 +11,7 @@
     "Express"
   ],
   "scripts": {
-    "start": "node examples/inspector.js"
+    "start": "node examples/devnet/bot.js"
   },
   "homepage": "https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples#readme",
   "repository": {

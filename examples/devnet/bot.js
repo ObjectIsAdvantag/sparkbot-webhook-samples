@@ -102,7 +102,7 @@ bot.onEvent("memberships", "created", function (trigger) {
             .then(function (message) {
                 if (message.roomType == "group") {
                     spark.messageSendRoom(message.roomId, {
-                        markdown: "**Note that this is a 'Group' room. I will wake up only when mentionned.**"
+                        markdown: "**Note: as this is a 'Group' room,  I will wake up only when mentionned.\nExample: @" + bot.interpreter.person.nickName + " " +  bot.interpreter.prefix + "help**"
                     })
                         .then(function (message) {
                             showHelp(message.roomId);

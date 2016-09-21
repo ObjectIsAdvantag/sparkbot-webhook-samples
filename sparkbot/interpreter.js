@@ -30,6 +30,9 @@ function CommandInterpreter(config) {
 
 		self.accountType = account;
 		self.person = people;
+
+        var splitted = people.displayName.split(' ');
+	    self.person.nickName = splitted[0];
 	});
 
     this.trimMention = config.trimMention;
@@ -200,19 +203,6 @@ function detectSparkAccount(token, cb) {
 		cb(new Error("cannot find Spark account for token"), null, null);
 	});
 	req.end();
-}
-
-
-// Remove leading bot name (or fraction) from text 
-// If the bot name appears elsewhere in the text, it is not removed
-function trimBotName(text, name) {
-	var splitted = name.split(' ');
-	var nickname = splitted[0];
-	if (text.startsWith(nickname)) {
-		console.log("message starts with bot name, removing it")
-		return text.substring(nickname.length).trim();
-	}
-	return text;
 }
 
 

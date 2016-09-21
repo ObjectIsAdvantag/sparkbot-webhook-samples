@@ -103,12 +103,12 @@ function Webhook(config) {
 				token			: (self.token != null),
 				account			: {
 					type		: self.interpreter.accountType,
-					person		: self.interpreter.person,
+					nickName	: self.interpreter.nickName,
+					person		: self.interpreter.person
 				},
 				interpreter		: {
 					prefix		: self.interpreter.prefix,
 					trimMention	: self.interpreter.trimMention,
-					nickName	: self.nickName,
 					ignoreSelf  : self.interpreter.ignoreSelf
 				},
 				commands        : Object.keys(self.router.commands),

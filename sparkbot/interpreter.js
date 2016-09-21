@@ -19,6 +19,12 @@ function CommandInterpreter(config) {
         return;
     }
     
+    this.trimMention = config.trimMention;
+    this.prefix = config.commandPrefix;
+    if (config.ignoreSelf) {
+        this.ignoreSelf = config.ignoreSelf;
+    }
+    
     this.accountType = "unknown";
 	this.person = null;
     var self = this;
@@ -32,12 +38,19 @@ function CommandInterpreter(config) {
 		self.person = people;
 
         var splitted = people.displayName.split(' ');
-	    self.person.nickName = splitted[0];
+	    self.nickName = splitted[0];
+
+        // If ignoreSelf is not explicitely set, let's initialize it 
+        if (!self.ignoreSelf) {
+            if (self.accountType == "machine") {
+                self.ignoreSelf = true;
+            }
+            else {
+                self.ignoreSelf = false;
+            }
+        }
 	});
 
-    this.trimMention = config.trimMention;
-    this.prefix = config.commandPrefix;
-    this.ignoreSelf = config.ignoreSelf;
 }
 
 

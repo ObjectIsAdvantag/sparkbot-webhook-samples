@@ -47,8 +47,9 @@ function Webhook(config) {
 			path			: process.env.WEBHOOK_URL || "/",
 			token			: process.env.SPARK_TOKEN,
 			trimMention	 	: true,
-			commandPrefix 	: process.env.COMMAND_PREFIX || "/" ,
-			ignoreSelf		: false
+			commandPrefix 	: process.env.COMMAND_PREFIX || "/" 
+			// The ignoreSelf variable is not initialized, will default to true if a bot is used, and false otherwise 
+			//ignoreSelf		: false
 		};
 	} 
 
@@ -107,6 +108,7 @@ function Webhook(config) {
 				interpreter		: {
 					prefix		: self.interpreter.prefix,
 					trimMention	: self.interpreter.trimMention,
+					nickName	: self.nickName,
 					ignoreSelf  : self.interpreter.ignoreSelf
 				},
 				commands        : Object.keys(self.router.commands),

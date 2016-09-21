@@ -10,11 +10,11 @@ DOCKER_HOST_IPADDRESS=192.168.99.100
 default: dev
 
 dev:
-	DEBUG=samples,sparkbot node minimalist.js
+	DEBUG=samples,sparkbot node tests/express-spark-webhook.js
 
 run:
 	(lt -s sparkbot -p 8080 &)
-	node minimalist.js
+	node tests/express-spark-webhook.js
 
 dimage:
 	docker build -t $(DOCKER_ACCOUNT)/sparkbot-samples .

@@ -18,7 +18,7 @@ var Events = require("./events.js");
 
 bot.onCommand("about", function (command) {
     spark.messageSendRoom(command.message.roomId, {
-        markdown: "```\n{\n   'author':'Brought to you by Cisco DevNet',\n   'code':'https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples/blob/master/examples/devnet/bot.js',\n   'description':'find next DevNet event coming close to you',\n   'healthcheck':'GET https://heroku/',\n   'webhook':'POST https://heroku/'\n}\n```"
+        markdown: "```\n{\n   'author':'Brought to you by Cisco DevNet',\n   'code':'https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples/blob/master/examples/devnet/bot.js',\n   'description':'shows upcoming DevNet events',\n   'healthcheck':'GET https://heroku/',\n   'webhook':'POST https://heroku/'\n}\n```"
     });
 });
 
@@ -102,7 +102,7 @@ bot.onEvent("memberships", "created", function (trigger) {
             .then(function (message) {
                 if (message.roomType == "group") {
                     spark.messageSendRoom(message.roomId, {
-                        markdown: "**Note: as this is a 'Group' room,  I will wake up only when mentionned.\nExample: @" + bot.interpreter.person.nickName + " " +  bot.interpreter.prefix + "help**"
+                        markdown: "**Note: this is a 'Group' room,  I will wake up only when mentionned, ex: @" + bot.interpreter.nickName + " " +  bot.interpreter.prefix + "help**"
                     })
                         .then(function (message) {
                             showHelp(message.roomId);

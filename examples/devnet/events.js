@@ -4,8 +4,6 @@ var fine = require("debug")("samples:fine");
 
 var request = require("request");
 
-var Events = require("./util.js");
-
 
 module.exports.fetchNext = function(limit, cb) {
 

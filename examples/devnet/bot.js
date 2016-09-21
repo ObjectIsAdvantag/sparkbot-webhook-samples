@@ -13,6 +13,8 @@ var bot = new SparkBot();
 var SparkClient = require("node-sparky");
 var spark = new SparkClient({ token: process.env.SPARK_TOKEN });
 
+var Events = require("./events.js");
+
 
 bot.onCommand("about", function (command) {
     spark.messageSendRoom(command.message.roomId, {
@@ -24,7 +26,7 @@ bot.onCommand("about", function (command) {
 bot.onCommand("fallback", function (command) {
     // so happy to join
     spark.messageSendRoom(command.message.roomId, {
-        text: "sorry, I did not understand"
+        text: "**sorry, I did not understand**"
     })
         .then(function (message) {
             // show how to use
@@ -88,4 +90,27 @@ bot.onCommand("now", function (command) {
 });
 
 
+bot.onEvent("memberships", "created", function (trigger) {
+    var newMembership = trigger.data; // see specs here: https://developer.ciscospark.com/endpoint-memberships-get.html
+    if (newMembership.personId == bot.interpreter.person.id) {
+        debug("bot's just added to room: " + trigger.data.roomId);
 
+        // so happy to join
+        spark.messageSendRoom(trigger.data.roomId, {
+            text: "Hi, I am the DevNet Bot !"
+        })
+            .then(function (message) {
+                if (message.roomType == "group") {
+                    spark.messageSendRoom(message.roomId, {
+                        markdown: "**Note that this is a 'Group' room. I will wake up only when mentionned.**"
+                    })
+                        .then(function (message) {
+                            showHelp(message.roomId);
+                        });
+                }
+                else {
+                    showHelp(message.roomId);
+                }
+            });
+    }
+});

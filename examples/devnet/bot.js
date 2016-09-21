@@ -18,7 +18,7 @@ var Events = require("./events.js");
 
 bot.onCommand("about", function (command) {
     spark.messageSendRoom(command.message.roomId, {
-        markdown: "```\n{\n   'author':'Brought to you by Cisco DevNet',\n   'code':'https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples/blob/master/examples/devnet/bot.js',\n   'description':'shows upcoming DevNet events',\n   'healthcheck':'GET https://heroku/',\n   'webhook':'POST https://heroku/'\n}\n```"
+        markdown: "```\n{\n   'author':'Brought to you by Cisco DevNet',\n   'code':'https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples/blob/master/examples/devnet/bot.js',\n   'description':'shows upcoming DevNet events',\n   'healthcheck':'GET http://devnet-events-sparkbot.herokuapp.com/',\n   'webhook':'POST http://devnet-events-sparkbot.herokuapp.com/'\n}\n```"
     });
 });
 

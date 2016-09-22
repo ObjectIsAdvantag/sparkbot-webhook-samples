@@ -10,8 +10,8 @@ It has been designed as a companion to a DevNet learning lab, and to help nodejs
 _Note that running a few [tests](../tests) is a great way to discover the framework features._
 
 - cisco spark webhooks
-   - supports all webhooks specified, see https://developer.ciscospark.com/webhooks-explained.html
-   - via .on() listeners function to (resources/event) triggers
+   - supports all Spark webhooks, see https://developer.ciscospark.com/webhooks-explained.html
+   - via listeners function: .on(<resources>,<event>)
    - check [onEvent-all-all](../tests/onEvent-all-all.js) and [onEvent-messages-created](../tests/onEvent-messages-created.js) code samples
 
 - new message handler

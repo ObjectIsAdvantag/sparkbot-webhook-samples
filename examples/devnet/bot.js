@@ -18,7 +18,7 @@ var Events = require("./events.js");
 
 bot.onCommand("about", function (command) {
     spark.messageSendRoom(command.message.roomId, {
-        markdown: "```\n{\n   'author':'Brought to you by Cisco DevNet',\n   'code':'https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples/blob/master/examples/devnet/bot.js',\n   'description':'shows upcoming DevNet events',\n   'healthcheck':'GET http://devnet-events-sparkbot.herokuapp.com/',\n   'webhook':'POST http://devnet-events-sparkbot.herokuapp.com/'\n}\n```"
+        markdown: "```\n{\n   'author':'Brought to you by Cisco DevNet',\n   'code':'https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples/blob/master/examples/devnet/bot.js',\n   'description':'shows upcoming DevNet events',\n   'healthcheck':'GET https://devnet-events-sparkbot.herokuapp.com/',\n   'webhook':'POST https://devnet-events-sparkbot.herokuapp.com/'\n}\n```"
     });
 });
 
@@ -50,7 +50,7 @@ bot.onCommand("next", function (command) {
         markdown: "_heard you! asking my crystal ball..._"
     });
 
-    var limit = command.args[0];
+    var limit = parseInt(command.args[0]);
     if (!limit) limit = 5;
     if (limit < 1) limit = 1;
 

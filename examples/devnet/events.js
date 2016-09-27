@@ -37,6 +37,9 @@ module.exports.fetchNext = function(limit, cb) {
 
         var nb = events.length;
         var msg = "**" + nb + " upcoming events:**";
+        if (nb == 1) {
+            msg = "**1 upcoming event:**";
+        }
         for (var i = 0; i < nb; i++) {
             var current = events[i];
             msg += "\n- " + current.beginDay + " - " + current.endDay + ": [" + current.name + "](" + current.location_url + "), " + current.city + " (" + current.country + ")";
@@ -79,6 +82,9 @@ module.exports.fetchNext = function(limit, cb) {
 
         var nb = events.length;
         var msg = "**" + nb + " events are running now:**";
+        if (nb == 1) {
+            msg = "**1 event is running now:**";
+        }
         for (var i = 0; i < nb; i++) {
             var current = events[i];
             msg += "\n- " + current.beginDay + " - " + current.endDay + ": [" + current.name + "](" + current.location_url + "), " + current.city + " (" + current.country + ")";

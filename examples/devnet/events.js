@@ -42,7 +42,7 @@ module.exports.fetchNext = function(limit, cb) {
         }
         for (var i = 0; i < nb; i++) {
             var current = events[i];
-            msg += "\n- " + current.beginDay + " - " + current.endDay + ": [" + current.name + "](" + current.location_url + "), " + current.city + " (" + current.country + ")";
+            msg += "\n- " + current.beginDay + " - " + current.endDay + ": [" + current.name + "](" + current.url + "), " + current.city + " (" + current.country + ")";
         }
 
         cb(null, msg);
@@ -87,7 +87,7 @@ module.exports.fetchNext = function(limit, cb) {
         }
         for (var i = 0; i < nb; i++) {
             var current = events[i];
-            msg += "\n- " + current.beginDay + " - " + current.endDay + ": [" + current.name + "](" + current.location_url + "), " + current.city + " (" + current.country + ")";
+            msg += "\n- " + current.beginDay + " - " + current.endDay + ": [" + current.name + "](" + current.url + "), " + current.city + " (" + current.country + ")";
         }
 
         cb(null, msg);

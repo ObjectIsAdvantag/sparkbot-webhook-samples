@@ -124,8 +124,11 @@ bot.onEvent("memberships", "created", function (trigger) {
 });
 
 
+// Filter for incoming integration as these are automatically created by Spark back-end by creating a fake account
+// This fake account has an email built from the owner email and suffixed with a number
+// email: <owner-email>-<suffix-digits>@<owner-domain>
 function isIncomingIntegration(message) {
-    var matched = message.personEmail.match(/--\d+@/);
+    var matched = message.personEmail.match(/-\d+@/);
     if (!matched) {
         return false;
     }

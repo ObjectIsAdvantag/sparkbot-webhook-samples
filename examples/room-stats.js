@@ -21,11 +21,32 @@ var SparkClient = require("node-sparky");
 var spark = new SparkClient({ token: process.env.SPARK_TOKEN });
 
 
-bot.onCommand("help", function (command) {
+
+bot.onCommand("about", function (command) {
     spark.messageSendRoom(command.message.roomId, {
-        markdown: "I am all about Stats for your Spark rooms\n\n- /help\n\n- /stats [#messages] : computes stats from past messages, defaults to 100"
+        markdown: "```\n{\n   'author':'Stève Sfartz <stsfartz@cisco.com>',\n   'code':'https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples/blob/master/examples/room-stats.js',\n   'description':'a handy tool to retreive Spark Rooms identifiers',\n   'healthcheck':'GET https://sparkbot-room-stats.herokuapp.com',\n   'webhook':'POST https://sparkbot-room-stats.herokuapp.com'\n}\n```"
     });
 });
+
+
+bot.onCommand("fallback", function (command) {
+    // so happy to join
+    spark.messageSendRoom(command.message.roomId, {
+        text: "sorry, I did not understand"
+    })
+        .then(function (message) {
+            // show how to use
+            showHelp(command.message.roomId);
+        });
+});
+bot.onCommand("help", function (command) {
+    showHelp(command.message.roomId);
+});
+function showHelp(roomId) {
+     spark.messageSendRoom(command.message.roomId, {
+        markdown: "I am all about Stats for your Spark rooms\n\n- /about\n\n- /help\n\n- /stats [#messages] : computes stats from past messages, defaults to 100"
+    });
+}
 
 
 bot.onCommand("stats", function (command) {

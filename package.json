@@ -2,7 +2,7 @@
   "name": "sparkbot-webhook",
   "version": "v0.1.0",
   "description": "Library to create Cisco Spark Webhooks in nodejs, with easy to add Bot Commands",
-  "main": "examples/inspector.js",
+  "main": "examples/roomid-phantom.js",
   "keywords": [
     "SparkBot",
     "CiscoSpark",
@@ -11,7 +11,7 @@
     "Express"
   ],
   "scripts": {
-    "start": "node examples/devnet/bot.js"
+    "start": "node examples/roomid-phantom.js"
   },
   "homepage": "https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples#readme",
   "repository": {

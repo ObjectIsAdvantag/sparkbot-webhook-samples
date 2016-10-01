@@ -30,6 +30,23 @@ Invite _inspect@sparkbot.io_ to meet the bot.
 
 
 
+## [roomId](examples/roomid-phantom.js)
+
+Fetches the identifier of the room in which this bot has just been added, 
+and leaves the inquired room right away.
+
+Features illustrated by this example:
+- Help command to display available commands
+- About command to get meta info about the bot
+- Fallback message if a command is not recognized
+- **Creates a 1-1 room and leaves a room, with node-sparky client**
+
+Invite _roomid@sparkbot.io_ to meet the bot.
+
+![](docs/img/bot-roomId.png)
+
+
+
 ## [room-stats](examples/room-stats.js)
 
 Computes stats for the room it is invoked from. 
@@ -43,8 +60,6 @@ Features illustrated by this example:
 
 Note that this webhook must be run with a Developer access token (either your's or a fake Spark account).
 More details: this code needs to access all messages from the room, bots cannot read messages from Rooms (ie, GET Rooms returns a 403 with a bot token).
-
-Invite _stats@chatbot.land_ to meet the bot.
 
 
 

@@ -10,7 +10,7 @@
     "Express"
   ],
   "scripts": {
-    "start": "node examples/sparkbot-room-stats.js"
+    "start": "node examples/room-stats.js"
   },
   "homepage": "https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples#readme",
   "repository": {

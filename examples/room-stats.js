@@ -13,9 +13,7 @@ var fine = require("debug")("samples:fine");
 var SparkBot = require("../sparkbot/webhook");
 var bot = new SparkBot();
 
-// do not listen to ourselves
-// comment the line below if you're running the bot from your Developer access token and you want to invoke in a test room
-//bot.interpreter.ignoreSelf = true; 
+bot.interpreter.prefix = "#";
 
 var SparkClient = require("node-sparky");
 var spark = new SparkClient({ token: process.env.SPARK_TOKEN });
@@ -24,7 +22,7 @@ var spark = new SparkClient({ token: process.env.SPARK_TOKEN });
 
 bot.onCommand("about", function (command) {
     spark.messageSendRoom(command.message.roomId, {
-        markdown: "```\n{\n   'author':'Stève Sfartz <stsfartz@cisco.com>',\n   'code':'https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples/blob/master/examples/room-stats.js',\n   'description':'a handy tool to retreive Spark Rooms identifiers',\n   'healthcheck':'GET https://sparkbot-room-stats.herokuapp.com',\n   'webhook':'POST https://sparkbot-room-stats.herokuapp.com'\n}\n```"
+        markdown: "```\n{\n   'author':'Stève Sfartz <stsfartz@cisco.com>',\n   'code':'https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples/blob/master/examples/room-stats.js',\n   'description':'computes the top contributors in a spark room',\n   'healthcheck':'GET https://sparkbot-room-stats.herokuapp.com',\n   'webhook':'POST https://sparkbot-room-stats.herokuapp.com'\n}\n```"
     });
 });
 
@@ -43,8 +41,11 @@ bot.onCommand("help", function (command) {
     showHelp(command.message.roomId);
 });
 function showHelp(roomId) {
-     spark.messageSendRoom(command.message.roomId, {
-        markdown: "I am all about Stats for your Spark rooms\n\n- /about\n\n- /help\n\n- /stats [#messages] : computes stats from past messages, defaults to 100"
+    spark.messageSendRoom(command.message.roomId, {
+        markdown: "I am all about Stats for your Spark rooms\n- "
+        + bot.interpreter.prefix + "about\n- "
+        + bot.interpreter.prefix + "help\n- "
+        + bot.interpreter.prefix + "stats [#messages] : computes stats from past messages, defaults to 100"
     });
 }
 

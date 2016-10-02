@@ -13,6 +13,7 @@ var fine = require("debug")("samples:fine");
 var SparkBot = require("../sparkbot/webhook");
 var bot = new SparkBot();
 
+// Change command prefix to #
 bot.interpreter.prefix = "#";
 
 var SparkClient = require("node-sparky");
@@ -138,9 +139,7 @@ bot.onEvent("memberships", "created", function (trigger) {
             text: "Hi, I am so happy to join !"
         })
             .then(function (message) {
-                spark.messageSendRoom(trigger.data.roomId, {
-                    markdown: "I am all about Stats for your Spark rooms\n\n- /help\n\n- /stats [#messages]"
-                });;
+                showHelp(trigger.data.roomId);
             });
     }
 });

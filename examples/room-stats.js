@@ -42,10 +42,7 @@ bot.onCommand("help", function (command) {
 });
 function showHelp(roomId) {
     spark.messageSendRoom(command.message.roomId, {
-        markdown: "I am all about Stats for your Spark rooms\n- "
-        + bot.interpreter.prefix + "about\n- "
-        + bot.interpreter.prefix + "help\n- "
-        + bot.interpreter.prefix + "stats [#messages] : computes stats from past messages, defaults to 100"
+        markdown: "I am all about Stats for your Spark rooms\n- " + bot.interpreter.prefix + "about\n- " + bot.interpreter.prefix + "help\n- " + bot.interpreter.prefix + "stats [#messages] : computes stats from past messages, defaults to 100"
     });
 }
 

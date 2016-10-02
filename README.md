@@ -1,6 +1,5 @@
 # Cisco Spark WebHook Examples in nodejs
 
-
 Interested in creating your own Cisco Spark bots ? Pick an example that suits your scenario, and customize it.
 
 To run any of these examples, follow the [How to run on Cloud9](docs/HowToRunOnCloud9.md) or [How to run locally](docs/HowToRegisterOnSpark.md) guide.
@@ -54,6 +53,7 @@ Computes stats for the room it is invoked from.
 Features illustrated by this example:
 - Help message to display bot commands
 - Welcome message as the bot is added in a room
+- **Custom command prefix #**
 - **Markdown formatting with lists & mentions**
 - **Runs with a Developer account**
 

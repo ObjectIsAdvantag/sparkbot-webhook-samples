@@ -99,5 +99,3 @@ Features illustrated by this example:
 Note this bot is provided as an example and should not be deployed without the consent of Dilbert Comics Strip. 
 Go thru the [guide](examples/dilbert) to deploy locally for learning purposes.
 
-![](docs/img/bot-dilbert-strip.png)
-

@@ -1,11 +1,10 @@
-# Cisco Spark WebHook Examples in nodejs
+# Spark Bot examples in nodejs
 
 Interested in creating your own Cisco Spark bots ? Pick an example that suits your scenario, and customize it.
 
 To run any of these examples, follow the [How to run on Cloud9](docs/HowToRunOnCloud9.md) or [How to run locally](docs/HowToRegisterOnSpark.md) guide.
 
-The examples below leverage the [sparkbot-webhook](sparkbot) nodejs library.  
-To learn more about the library, check the [tests](tests/README.md) examples.
+The examples below leverage the [node-sparkbot](https://github.com/CiscoDevNet/node-sparkbot) nodejs library.  
 
 To go further, take a [DevNet Learning lab](https://learninglabs.cisco.com/labs).
 

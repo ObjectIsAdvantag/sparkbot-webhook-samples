@@ -1,3 +1,8 @@
+//
+// Copyright (c) 2016 Cisco Systems
+// Licensed under the MIT License 
+//
+
 /* 
  * a bot that gives you instant access to Cisco Spark technical data
  * 

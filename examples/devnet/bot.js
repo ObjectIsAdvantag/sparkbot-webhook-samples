@@ -1,5 +1,12 @@
+//
+// Copyright (c) 2016 Cisco Systems
+// Licensed under the MIT License 
+//
+
 /* 
- * a bot that help you get orientation at DevNet
+ * a bot to list current and upcoming DevNet events
+ * 
+ * reads events from a REST API which reflects https://developer.cisco.com/site/devnet/events-contests/events/
  * 
  */
 

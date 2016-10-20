@@ -1,7 +1,7 @@
 {
-  "name": "sparkbot-webhook-samples",
+  "name": "sparbot-samples",
   "version": "v0.2.0",
-  "description": "Examples of Cisco Spark bots in nodejs",
+  "description": "examples of Spark Bots in nodejs",
   "keywords": [
     "SparkBot",
     "CiscoSpark",
@@ -10,14 +10,14 @@
     "Express"
   ],
   "scripts": {
-    "start": "node examples/room-stats.js"
+    "start": "node examples/inspector.js"
   },
   "homepage": "https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples.git"
   },
-  "author": "Stève Sfartz",
+  "author": "Stève Sfartz (Cisco DevNet)",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.15.0",

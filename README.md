@@ -82,20 +82,3 @@ Invite _CiscoDevNet@sparkbot.io_ to meet the bot.
 
 ![](docs/img/bot-ciscodevnet-next.png)
 
-
-
-## [dilbert](examples/dilbert/bot.js)
-
-Fetches latest comic from Dilbert Strip (with invitation ad to visit the Web Site)
-
-Features illustrated by this example:
-- Help command to display available commands
-- Welcome message as the bot is added in a room
-- Fallback message if a command is not recognized
-- **Command with a date argument**
-- **HTML scraping**
-- **Markdown formatting and file attachment**
-
-Note this bot is provided as an example and should not be deployed without the consent of Dilbert Comics Strip. 
-Go thru the [guide](examples/dilbert) to deploy locally for learning purposes.
-

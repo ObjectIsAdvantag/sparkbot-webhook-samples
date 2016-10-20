@@ -1,4 +1,4 @@
-# How to Guide: run your Cisco Spark bot on Cloud 9
+# "How to" Guide: run your Spark bot on Cloud 9
 
 [Cloud9](https://c9.io/) is a Cloud IDE where you can edit nodejs source code, but also run and debug your bots.
 
@@ -8,29 +8,30 @@
 
 ### Create a public Workspace
 
-Clone https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples 
-and pick a nodejs template
+Clone the [node-sparkbot](https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples) repo, and pick a Cloud9 nodejs template.
 
-![](../docs/img/cloud9-create-workspace.png)
+![](img/cloud9-create-workspace.png)
+
 
 ### Install node modules
 
-In the Cloud9 bash terminal, run "npm install" in your root folder
+In Cloud9 bash terminal, run "npm install" in your root folder.
 
-![](../docs/img/cloud9-npm-install.png)
+![](img/cloud9-npm-install.png)
+
 
 ### Choose a test or example
 
-Pick a JS file and click run
+Pick a javascript bot sample in the Cloud9 File explorer on the left, and click run.
 
 
 ### Customize your bot
 
-In the Run execution page, set the ENV variables
-- DEBUG => sparkbot*,samples*
-- SPARK_TOKEN => paste your Spark token from https://developer.ciscospark.com/
+In Cloud9 Run pane at bottom, set the following environment variables:
+- DEBUG: sparkbot*,samples*
+- SPARK_TOKEN: paste your Spark token, obtained from https://developer.ciscospark.com/
 
-![](../docs/img/cloud9-env-variables.png)
+![](img/cloud9-env-variables.png)
 
 
 ### Run or debug your bot

@@ -1,3 +1,8 @@
+//
+// Copyright (c) 2016 Cisco Systems
+// Licensed under the MIT License 
+//
+
 /* 
  * a Cisco Spark bot that computes stats for a room
  * 

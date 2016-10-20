@@ -1,6 +1,6 @@
 # How to Guide: connect your bot to Cisco Spark
 
-This guide details how to have your local bot (ie, running on a dev machine or a private network), talk to the Spark Cloud Service.
+This guide details how to have your local bot (ie, running on a dev machine or a private network), talk to the Spark Cloud platform.
 
 1. Start you bot
 2. Check your bot is healthy 
@@ -20,7 +20,7 @@ Here are the steps to install this project samples and run them
 
 ``` bash
 # Clone repo
-> git clone https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples
+> git clone https://github.com/CiscoDevNet/sparkbot-webhook-samples
 # Install dependencies 
 > cd sparkbot-webhook-samples
 > npm install
@@ -115,7 +115,7 @@ For the scope of this example, we'll associate our bot to all resources and even
 
 Note: even if our webhook can process all events, you can register a webhook with a more limited set of events. Then Spark will then invoke your webhook only if those events happen (whatever your bot can process).
 
-![](../docs/img/spark4devs-create-webhook-all-all.png)
+![](img/spark4devs-create-webhook-all-all.png)
 
 
 ### via CURL
@@ -136,6 +136,6 @@ As an alternative, you can run this CURL command.
 
 Or you can also create this webhook via Postman.
 
-![](../docs/img/postman-create-webhook-all-all.png)
+![](img/postman-create-webhook-all-all.png)
 
 

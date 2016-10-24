@@ -10,7 +10,7 @@ DOCKER_HOST_IPADDRESS=192.168.99.100
 default: dev
 
 dev:
-	DEBUG=samples,sparkbot node tests/express-spark-webhook.js
+	DEBUG=samples*,sparkbot* node tests/express-spark-webhook.js
 
 run:
 	(lt -s sparkbot -p 8080 &)

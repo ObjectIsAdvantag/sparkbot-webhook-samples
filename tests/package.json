@@ -1,9 +1,0 @@
-{
-  "main": "express-all-in-one.js",
-  "dependencies": {
-    "body-parser": "^1.15.0",
-    "debug": "^2.2.0",
-    "express": "^4.13.4",
-    "htmlparser2": "^3.9.1"
-  }
-}

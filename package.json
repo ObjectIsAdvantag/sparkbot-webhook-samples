@@ -1,7 +1,7 @@
 {
-  "name": "sparbot-samples",
-  "version": "v0.9.0",
-  "description": "examples of Spark Bots in nodejs",
+  "name": "node-sparbot-samples",
+  "version": "v0.9.1",
+  "description": "Examples of Spark Bots in nodejs",
   "keywords": [
     "SparkBot",
     "CiscoSpark",

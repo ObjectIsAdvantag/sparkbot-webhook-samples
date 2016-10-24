@@ -1,4 +1,4 @@
-# How to Guide: connect your bot to Cisco Spark
+# How to Guide: run your Cisco Spark Bot locally
 
 This guide details how to have your local bot (ie, running on a dev machine or a private network), talk to the Spark Cloud platform.
 
@@ -20,7 +20,7 @@ Here are the steps to install this project samples and run them
 
 ``` bash
 # Clone repo
-> git clone https://github.com/CiscoDevNet/sparkbot-webhook-samples
+> git clone https://github.com/CiscoDevNet/node-sparkbot-samples
 # Install dependencies 
 > cd sparkbot-webhook-samples
 > npm install

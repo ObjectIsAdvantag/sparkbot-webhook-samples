@@ -3,7 +3,7 @@
  *
  */
 
-var SparkBot = require("../sparkbot/webhook");
+var SparkBot = require("node-sparkbot");
 
 // Leverage a simple webhook framework
 var bot = new SparkBot();

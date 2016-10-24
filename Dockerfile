@@ -16,7 +16,7 @@ WORKDIR /home/node/samples
 
 # build application 
 # [TIP] minimize image rebuilds needs by isolating dependencies from declarative aspects  
-COPY package-docker.json /home/node/samples/package.json
+COPY package.json /home/node/samples/package.json
 RUN npm install
 
 # check the .dockerignore file 

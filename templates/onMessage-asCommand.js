@@ -5,7 +5,7 @@
  *  
  */
 
-var SparkBot = require("../sparkbot/webhook");
+var SparkBot = require("node-sparkbot");
 
 // Starts your Webhook with default configuration where the SPARK API access token is read from the SPARK_TOKEN env variable 
 var bot = new SparkBot();

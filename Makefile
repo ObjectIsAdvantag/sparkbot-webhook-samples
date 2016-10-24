@@ -10,20 +10,20 @@ DOCKER_HOST_IPADDRESS=192.168.99.100
 default: dev
 
 dev:
-	DEBUG=samples*,sparkbot* node tests/express-spark-webhook.js
+	DEBUG=samples*,sparkbot* node templates/on-event-all-all.js
 
 run:
 	(lt -s sparkbot -p 8080 &)
-	node tests/express-spark-webhook.js
+	node templates/on-event-all-all.js
 
 dimage:
-	docker build -t $(DOCKER_ACCOUNT)/sparkbot-samples .
+	docker build -t $(DOCKER_ACCOUNT)/node-sparkbot-samples .
 
 ddev: 
-	docker run -it -p 8080:8080 $(DOCKER_ACCOUNT)/sparkbot-samples
+	docker run -it -p 8080:8080 $(DOCKER_ACCOUNT)/node-sparkbot-samples
 
 drun: 
 	(lt -s sparkbot -l $(DOCKER_HOST_IPADDRESS) -p 8080 &)
-	docker run -it -p 8080:8080 $(DOCKER_ACCOUNT)/sparkbot-samples
+	docker run -it -p 8080:8080 $(DOCKER_ACCOUNT)/node-sparkbot-samples
     
 

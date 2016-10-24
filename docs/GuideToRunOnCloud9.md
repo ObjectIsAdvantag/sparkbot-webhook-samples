@@ -8,7 +8,10 @@
 
 ### Create a public Workspace
 
-Clone the [node-sparkbot](https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples) repo, and pick a Cloud9 nodejs template.
+Clone the [node-sparkbot](https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples) repo, and pick a Cloud9 nodejs __PRIVATE__ template.
+
+__as we leverage Cloud9 visual helper to set environment variables, these will be shared among the Cloud9 commmunity.
+Make sure to pick a PRIVATE template to avoid the risk to expose your Cisco Spark API access tokens__
 
 ![](img/cloud9-create-workspace.png)
 

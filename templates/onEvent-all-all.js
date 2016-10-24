@@ -1,6 +1,11 @@
+//
+// Copyright (c) 2016 Cisco Systems
+// Licensed under the MIT License 
+//
+
+
 /* 
- * a Cisco Spark webhook that leverages a simple library (batteries included)
- *
+ * a Cisco Spark Bot that listens to specific Webhooks events, leverages node-sparkbot webhook.onEvent() function.
  */
 
 var SparkBot = require("node-sparkbot");

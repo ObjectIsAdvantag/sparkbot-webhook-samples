@@ -1,8 +1,12 @@
+//
+// Copyright (c) 2016 Cisco Systems
+// Licensed under the MIT License 
+//
+
+
 /* 
  * a Cisco Spark webhook based on pure Express.js.
- * 
- * goal here is to illustrate how to create a bot without any library
- *
+ * goal here is to illustrate how to create a bot without leveraging more advanced framework libraries.
  */
 
 var express = require("express");

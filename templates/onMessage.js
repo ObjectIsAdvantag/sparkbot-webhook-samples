@@ -1,8 +1,12 @@
+//
+// Copyright (c) 2016 Cisco Systems
+// Licensed under the MIT License 
+//
+
+
 /* 
- * a Cisco Spark webhook that leverages a simple library (batteries included)
- * 
- * note : this example requires that you've set a SPARK_TOKEN env variable 
- *  
+ * a Cisco Spark webhook that leverages the node-sparkbot webhook.onMessage() function.
+ * note : this example requires that you've set a SPARK_TOKEN env variable
  */
 
 var SparkBot = require("node-sparkbot");

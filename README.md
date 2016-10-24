@@ -1,12 +1,15 @@
 # Cisco Spark Bot examples in nodejs
 
-Interested in creating your own Cisco Spark bots ? Pick a [template](templates/) that suits your scenario, and customize it.
+Interested in creating your own Cisco Spark bots ? 
 
-To run any of these examples, follow the [Guide to run on Cloud9](docs/GuideToRunLocally.md) or [Guide to run locally](docs/GuideToRunOnCloud9.md) guide.
+Go through the examples below.
+If you feel inspired, follow the guides to run your own version of these bots: [Guide to run on Cloud9](docs/GuideToRunLocally.md) and [Guide to run locally](docs/GuideToRunOnCloud9.md).  
 
-The examples below leverage the [node-sparkbot](https://github.com/CiscoDevNet/node-sparkbot) nodejs library.  
+Or pick a [template](templates/) that suits your scenario, and customize it.
 
-To go further, take a [DevNet Learning lab](https://learninglabs.cisco.com/labs).
+Note that these bot samples code leverage the [node-sparkbot](https://github.com/CiscoDevNet/node-sparkbot) library.
+
+__and if you're new to Cisco Spark Apps, note that DevNet provides 10 to 20' [Learning labs](https://learninglabs.cisco.com/labs).__
 
 
 

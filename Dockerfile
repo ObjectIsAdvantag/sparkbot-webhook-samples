@@ -11,21 +11,22 @@ EXPOSE 8080
 RUN useradd -c 'Node.js user' -m -d /home/node -s /bin/bash node
 
 # isolate code distribution
-RUN mkdir -p /home/node/samples
-WORKDIR /home/node/samples
+RUN mkdir -p /home/node/sparkbot
+WORKDIR /home/node/sparkbot
 
 # build application 
 # [TIP] minimize image rebuilds needs by isolating dependencies from declarative aspects  
-COPY package.json /home/node/samples/package.json
+COPY package.json /home/node/sparkbot/package.json
 RUN npm install
 
 # check the .dockerignore file 
-COPY . /home/node/samples
+COPY . /home/node/sparkbot
 
 # Switch to user mode
-RUN chown -R node:node /home/node/samples
+RUN chown -R node:node /home/node/sparkbot
 USER node
 ENV HOME /home/node
+ENV SCRIPT templates/onEvent-all-all.js
 
 # Run default sample
 CMD /usr/local/bin/node $SCRIPT
